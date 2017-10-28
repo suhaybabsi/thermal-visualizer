@@ -416,7 +416,7 @@ export function revealDeviceHandles(device) {
     device.flowOutlets.filter(outlet => {
 
         return outlet.direction == FlowDirection.OUT
-            && outlet.isConnected() === false;
+            //&& outlet.isConnected() === false;
     }).map(outlet => {
 
         deviceHandles.push(new OutletHandle(outlet));
@@ -549,6 +549,17 @@ function isShaftConnectedToPoint(dvc, c_cpl) {
     return false;
 }
 
+export function clear(){
+    
+    let _shafts = shafts.splice(0);
+    let _flows = flows.splice(0);
+    let _devices = devices.splice(0);
+
+    _shafts.map(shaft => shaft.delete() );
+    _flows.map(flow => flow.remove() );
+    _devices.map(dvc => dvc.remove() );
+}
+
 export function prepareSystemModel(){
 
     let model = {};
@@ -580,8 +591,9 @@ export function prepareSystemModel(){
 
         let src_op_index = src_dvc.flowOutlets.indexOf(src_op);
         let dest_op_index = dest_dvc.flowOutlets.indexOf(dest_op);
-
-        return {type: "stream",
+        let type = (src_op.type == FlowType.Stream) ? "stream" : "pipe";
+        
+        return {type,
                 from:{ d: src_d_index , o: src_op_index  }, 
                 to:  { d: dest_d_index, o: dest_op_index } };
     });

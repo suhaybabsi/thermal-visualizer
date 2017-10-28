@@ -17,10 +17,16 @@ $("#calculate-btn").click(function(e){
     calculateModel();
 });
 
+$('#clear-btn').click(function(e){
+
+    diagram.clear();
+});
+
 function calculateModel(){
 
     let model = diagram.prepareSystemModel();
     console.log(model);
+    console.log(JSON.stringify(model));
     
     var settings = {
         "async": true,

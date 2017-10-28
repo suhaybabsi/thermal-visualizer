@@ -183,6 +183,8 @@ class CouplingConfig {
 }
 
 export let deviceConfigurations = {
+
+    // Brayton Cycle - Gas Turbine
     intake: {
         name: "Gas Intake",
         abbrev: null,
@@ -197,7 +199,7 @@ export let deviceConfigurations = {
             ])
         ],
         outlets: [
-            new OutletConfig(FlowType.Gas, FlowDirection.OUT, 70, 20)
+            new OutletConfig(FlowType.Stream, FlowDirection.OUT, 70, 20)
         ]
     },
     exhaust: {
@@ -210,7 +212,7 @@ export let deviceConfigurations = {
             new Field("m", "Mass Flow Rate", null, FieldType.UNIT_COMBO, units.m)
         ],
         outlets: [
-            new OutletConfig(FlowType.Gas, FlowDirection.IN, 0, 20)
+            new OutletConfig(FlowType.Stream, FlowDirection.IN, 0, 20)
         ]
     },
     compressor: {
@@ -226,8 +228,8 @@ export let deviceConfigurations = {
             new Field("Xeff", "Second Law Efficiency", null, FieldType.UNIT, percentUnit)
         ],
         outlets: [
-            new OutletConfig(FlowType.Gas, FlowDirection.IN, 0, 0),
-            new OutletConfig(FlowType.Gas, FlowDirection.OUT, 70, 20)
+            new OutletConfig(FlowType.Stream, FlowDirection.IN, 0, 0),
+            new OutletConfig(FlowType.Stream, FlowDirection.OUT, 70, 20)
         ],
         couplings: [
             new CouplingConfig(30, ShaftOrientation.Horizontal)
@@ -251,8 +253,8 @@ export let deviceConfigurations = {
             new Field("Xeff", "Second Law Efficiency", null, FieldType.UNIT, percentUnit)
         ],
         outlets: [
-            new OutletConfig(FlowType.Gas, FlowDirection.IN,  0, 20),
-            new OutletConfig(FlowType.Gas, FlowDirection.OUT, 40, 20)
+            new OutletConfig(FlowType.Stream, FlowDirection.IN,  0, 20),
+            new OutletConfig(FlowType.Stream, FlowDirection.OUT, 40, 20)
         ]
     },
     gas_turbine: {
@@ -268,8 +270,8 @@ export let deviceConfigurations = {
             new Field("Xeff", "Second Law Efficiency", null, FieldType.UNIT, percentUnit)
         ],
         outlets: [
-            new OutletConfig(FlowType.Gas, FlowDirection.IN, 0, 20),
-            new OutletConfig(FlowType.Gas, FlowDirection.OUT, 70, 0)
+            new OutletConfig(FlowType.Stream, FlowDirection.IN, 0, 20),
+            new OutletConfig(FlowType.Stream, FlowDirection.OUT, 70, 0)
         ],
         couplings: [
             new CouplingConfig(30, ShaftOrientation.Horizontal)
@@ -286,6 +288,40 @@ export let deviceConfigurations = {
             new CouplingConfig(20, ShaftOrientation.Horizontal)
         ]
     },
+    heat_exchanger: {
+        name: "Heat Exchanger",
+        abbrev: "HE",
+        build: drawing.rectangle("#ed7612", 60, 50),
+        fields: [
+            new Field("ef", "Effectiveness", 0.8, FieldType.UNIT, percentUnit),
+            new Field("pl1", "Upper Side Pressure Loss", 0.03, FieldType.UNIT, percentUnit),
+            new Field("pl2", "Down Side Pressure Loss", 0.03, FieldType.UNIT, percentUnit),
+            new Field("Xdest", "Exergy Destruction", null, FieldType.UNIT_COMBO, units.w),
+            new Field("Xeff", "Second Law Efficiency", null, FieldType.UNIT, percentUnit)
+        ],
+        outlets: [
+            new OutletConfig(FlowType.Stream, FlowDirection.IN, 0, 10),
+            new OutletConfig(FlowType.Stream, FlowDirection.OUT, 60, 10),
+            new OutletConfig(FlowType.Stream, FlowDirection.IN, 60, 40),
+            new OutletConfig(FlowType.Stream, FlowDirection.OUT, 0, 40)
+        ]
+    },
+    intercooler: {
+        name: "Intercooler",
+        abbrev: "IC",
+        build: drawing.circle("#3245ed", 20),
+        fields: [
+            new Field("et", "Exit Flow Temperature", 288, FieldType.UNIT_COMBO, units.t),
+            new Field("pl", "Pressure Loss", 0.03, FieldType.UNIT, percentUnit),
+            new Field("he", "Heat Extracted", null, FieldType.UNIT_COMBO, units.w)
+        ],
+        outlets: [
+            new OutletConfig(FlowType.Stream, FlowDirection.IN, 0, 20),
+            new OutletConfig(FlowType.Stream, FlowDirection.OUT, 40, 20)
+        ]
+    },
+
+    // Propulsion cycle
     air_flow: {
         name: "Air Flow",
         build: drawing.arrow("red", "right"),
@@ -296,7 +332,136 @@ export let deviceConfigurations = {
             new Field("v", "Velocity", null, FieldType.UNIT_COMBO_LABEL, units.v)
         ],
         outlets: [
-            new OutletConfig(FlowType.Gas, FlowDirection.OUT, 70, 20)
+            new OutletConfig(FlowType.Stream, FlowDirection.OUT, 70, 20)
         ]
     },
+    diffuser: {
+        name: "Diffuser",
+        abbrev: "D",
+        build: drawing.rhomboid("green", "right"),
+        fields: [
+            new Field("pl", "Pressure Loss", 0.01, FieldType.UNIT, percentUnit),
+            new Field("hl", "Heat Loss", 0.0, FieldType.UNIT_COMBO, units.w)
+        ],
+        outlets: [
+            new OutletConfig(FlowType.Stream, FlowDirection.IN, 0, 30),
+            new OutletConfig(FlowType.Stream, FlowDirection.OUT, 70, 30)
+        ]
+    },
+    nozzle: {
+        name: "Nozzle",
+        abbrev: "N",
+        build: drawing.rhomboid("#8723be", "left"),
+        fields: [
+            new Field("pl", "Pressure Loss", 0.01, FieldType.UNIT, percentUnit),
+            new Field("hl", "Heat Loss", 0.0, FieldType.UNIT_COMBO, units.w),
+            new Field("esp", "Exit Static Pressure", 103, FieldType.UNIT_COMBO, units.p),
+            new Field("est", "Exit Static Temperature", null, FieldType.UNIT_COMBO, units.t),
+            new Field("em", "Exit Mach Number", null, FieldType.SIMPLE)
+        ],
+        outlets: [
+            new OutletConfig(FlowType.Stream, FlowDirection.IN, 0, 30),
+            new OutletConfig(FlowType.Stream, FlowDirection.OUT, 70, 30)
+        ]
+    },
+    // Rankin Cycle - Steam Turbine
+    boiler: {
+        name: "Boiler",
+        abbrev: "B",
+        build: drawing.rectangle("#8723be", 40, 60),
+        fields: [
+            new Field("et", "Exit Temperature", 898.15, FieldType.UNIT_COMBO, units.t),
+            new Field("hp", "Heat Produced", null, FieldType.UNIT_COMBO, units.w),
+            new Field("pl", "Pressure Loss", 0.044, FieldType.UNIT, percentUnit)
+        ],
+        outlets: [
+            new OutletConfig(FlowType.Pipe, FlowDirection.IN, 20, 0),
+            new OutletConfig(FlowType.Pipe, FlowDirection.OUT, 20, 60)
+        ]
+    },
+    pump: {
+        name: "Pump",
+        abbrev: "P",
+        build: drawing.circle("#3245ed", 20),
+        fields: [
+            new Field("mp", "Mass Flow Rate", 15, FieldType.UNIT_COMBO, units.m),
+            new Field("ep", "Exit Pressure", 16000, FieldType.UNIT_COMBO, units.p),
+            new Field("np", "Isentropic Efficiency", 0.85, FieldType.UNIT, percentUnit),
+            new Field("wp", "Work Consumed", null, FieldType.UNIT_COMBO, units.w)
+        ],
+        outlets: [
+            new OutletConfig(FlowType.Pipe, FlowDirection.IN , 0, 20),
+            new OutletConfig(FlowType.Pipe, FlowDirection.OUT, 40, 20)
+        ]
+    },
+    steam_turbine: {
+        name: "Steam Turbine",
+        abbrev: "ST",
+        build: drawing.rhomboid("orange", "right"),
+        fields: [
+            new Field("nt", "Isentropic Efficiency", 0.87, FieldType.UNIT, percentUnit),
+            new Field("ep", "Exit Pressure", 10, FieldType.UNIT_COMBO, units.p),
+            new Field("wt", "Work Produced", null, FieldType.UNIT_COMBO, units.w)
+        ],
+        outlets: [
+            new OutletConfig(FlowType.Pipe, FlowDirection.IN, 0, 20),
+            new OutletConfig(FlowType.Pipe, FlowDirection.OUT, 70, 60)
+        ],
+        couplings: [
+            new CouplingConfig(30, ShaftOrientation.Horizontal)
+        ]
+    },
+    condenser: {
+        name: "Condenser",
+        abbrev: "CD",
+        build: drawing.circle("#3245ed", 20),
+        fields: [
+            new Field("he", "Heat Extracted", null, FieldType.UNIT_COMBO, units.w),
+            new Field("pl", "Pressure Loss", 0.03, FieldType.UNIT, percentUnit),
+            new Field("sa", "Subcooling Amount", 5, FieldType.UNIT_COMBO, units.dt)
+        ],
+        outlets: [
+            new OutletConfig(FlowType.Pipe, FlowDirection.IN , 20, 0),
+            new OutletConfig(FlowType.Pipe, FlowDirection.OUT, 20, 40)
+        ]
+    },
+    open_feed_heater: {
+        name: "Open Feed Water Heater",
+        abbrev: "OWH",
+        build: drawing.rectangle("#ed7612", 60, 50),
+        fields: [
+            new Field("p", "Mixing Pressure", null, FieldType.UNIT_COMBO, units.p)
+        ],
+        outlets: [
+            new OutletConfig(FlowType.Pipe, FlowDirection.IN, 30, 0),
+            new OutletConfig(FlowType.Pipe, FlowDirection.OUT, 30, 50),
+            new OutletConfig(FlowType.Pipe, FlowDirection.IN, 60, 25),
+            new OutletConfig(FlowType.Pipe, FlowDirection.OUT, 0, 25)
+        ]
+    },
+    closed_feed_heater: {
+        name: "Closed Feed Water Heater",
+        abbrev: "CWH",
+        build: drawing.rectangle("#ed7612", 60, 50),
+        fields: [],
+        outlets: [
+            new OutletConfig(FlowType.Pipe, FlowDirection.IN, 30, 0),
+            new OutletConfig(FlowType.Pipe, FlowDirection.OUT, 30, 50),
+            new OutletConfig(FlowType.Pipe, FlowDirection.IN, 60, 25),
+            new OutletConfig(FlowType.Pipe, FlowDirection.OUT, 0, 25)
+        ]
+    },
+    mixing_chamber: {
+        name: "Mixing Chamber",
+        abbrev: "MC",
+        build: drawing.rectangle("#ed7612", 60, 50),
+        fields: [
+            new Field("p", "Mixing Pressure", null, FieldType.UNIT_COMBO, units.p)
+        ],
+        outlets: [
+            new OutletConfig(FlowType.Pipe, FlowDirection.IN, 0, 10),
+            new OutletConfig(FlowType.Pipe, FlowDirection.IN, 0, 40),
+            new OutletConfig(FlowType.Pipe, FlowDirection.OUT, 60, 25)
+        ]
+    }
 };

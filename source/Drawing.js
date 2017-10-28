@@ -55,6 +55,24 @@ export function circle(color, radius) {
     }
 }
 
+export function rectangle(color, w, h) {
+
+    let wt = (w) ? w : 60;
+    let ht = (h) ? h : 50;
+
+    return () => {
+
+        let rect = new Paper.Rectangle(0, 0, wt, ht);
+        let rectShp = new Paper.Path.Rectangle(rect);
+        rectShp.fillColor = color;
+        rectShp.strokeColor = new Color(1, 1, 1, 0.5);
+        rectShp.strokeWidth = 1;
+        rectShp.pivot = new Point(0, 0);
+
+        return rectShp;
+    }
+}
+
 export function rhomboid(color, orientation, width, height, margin) {
 
     let w = (width) ? width : 70;
@@ -110,7 +128,7 @@ export function arrow(color, orientation, width, height, head_width, head_margin
             path.lineTo(new Point(hw, h - hm));
             path.lineTo(new Point(hw, h));
             path.closePath();
-            
+
         } else {
 
             path.moveTo(new Point(0, hm));
@@ -121,7 +139,7 @@ export function arrow(color, orientation, width, height, head_width, head_margin
             path.lineTo(new Point(w - hw, h - hm));
             path.lineTo(new Point(0, h - hm));
             path.closePath();
-            
+
         }
 
         path.fillColor = color;

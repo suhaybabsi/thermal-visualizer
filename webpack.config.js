@@ -32,10 +32,7 @@ module.exports = {
               NODE_ENV: JSON.stringify('production')
             }
         }),
-        new webpack.optimize.UglifyJsPlugin({
-            mangle: false, 
-            sourcemap: false 
-        })
+        new webpack.optimize.UglifyJsPlugin()
     ],
     devServer: {
         contentBase: path.resolve(__dirname, 'visualizer'),

@@ -9,6 +9,8 @@ import Chart from 'chart.js';
 diagram.setup();
 diagram.on("ready", function () {
 
+    console.log("Hello there, Visualizer is ready :)")
+
     let intake = new Device("intake");
     let compressor = new Device("compressor");
     let burner = new Device("burner");

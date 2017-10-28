@@ -5,6 +5,7 @@ import RC2 from "react-chartjs2";
 import * as diagram from "../Diagram";
 import { units } from "../Setup";
 import ComboBox from "./components/ComboBox";
+import dispatcher from "../Dispatcher";
 
 let chartItems = [
     {name: "Temperature", prop: "t", unit: units.t[0]},
@@ -57,6 +58,21 @@ export default class ResultsPanel extends React.Component {
         let item = chartItems[0];
         this.prepareData(item);
         this.setState({chartItem: item});
+
+        this.regId = dispatcher.register( this.handleActions.bind(this) );
+    }
+
+    componentWillUnmount(){
+        dispatcher.unregister(this.regId);
+    }
+
+    handleActions(action){
+        switch(action.type){
+            case "MODEL_CALCULATED":
+                this.prepareData(this.state.chartItem);
+                this.forceUpdate();
+                break;
+        }
     }
 
     prepareData(item){

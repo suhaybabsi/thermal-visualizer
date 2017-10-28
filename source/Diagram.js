@@ -159,9 +159,6 @@ on("ready", function () {
         isKeyDown = false;
         if (e.key === 'shift') {
             doDragGrid = false;
-            flows.map( (flw, i) => { 
-                flw.translatePoints(totalGridDelta); 
-            } );
             totalGridDelta = null;
         }
 

@@ -46,8 +46,6 @@ export default class Device extends Paper.Group {
         }
 
         this.build(config);
-        this.on("mousedown", this.mouseDownHandler);
-        this.on("mouseup", this.mouseUpHandler);
         this.on("mouseenter", this.mouseEnterHandler);
         this.on("mousedrag", this.dragHandler);
         this.on("doubleclick", this.clickHandler);
@@ -87,14 +85,6 @@ export default class Device extends Paper.Group {
         }
     }
 
-    mouseUpHandler(e) {
-        this.flowsUpdateEnded();
-    }
-
-    mouseDownHandler(e) {
-        this.flowsUpdateStarted();
-    }
-
     dragHandler(e) {
 
         if( !diagram.doDragGrid ) {
@@ -103,22 +93,6 @@ export default class Device extends Paper.Group {
             this.updateFlows();
             this.updateShafts();
         }
-    }
-    
-    flowsUpdateStarted() {
-        this.flowOutlets.map((outlet, i) => {
-            if (outlet.flow) {
-                outlet.flow.updateStarted();
-            }
-        });
-    }
-
-    flowsUpdateEnded() {
-        this.flowOutlets.map((outlet, i) => {
-            if (outlet.flow) {
-                outlet.flow.updateEnded();
-            }
-        });
     }
 
     updateFlows() {
@@ -138,9 +112,7 @@ export default class Device extends Paper.Group {
     }
 
     updateLocation(point) {
-        this.flowsUpdateStarted();
         this.position = point;
         this.updateFlows();
-        this.flowsUpdateEnded();
     }
 }

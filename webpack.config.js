@@ -27,7 +27,15 @@ module.exports = {
         filename: "thermal-visualizer.min.js"
     },
     plugins: debug ? [] : [
-        new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false })
+        new webpack.DefinePlugin({
+            'process.env': {
+              NODE_ENV: JSON.stringify('production')
+            }
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+            mangle: false, 
+            sourcemap: false 
+        })
     ],
     devServer: {
         contentBase: path.resolve(__dirname, 'visualizer'),

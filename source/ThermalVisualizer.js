@@ -5,6 +5,7 @@ import Device from "./Device";
 import {Flow} from "./Flow";
 import {Shaft} from "./Shaft";
 import Chart from 'chart.js';
+import "./ui/Forms";
 
 diagram.setup();
 diagram.on("ready", function () {

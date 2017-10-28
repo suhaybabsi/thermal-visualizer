@@ -13,7 +13,7 @@ $('.device-btn').click(function (e) {
 });
 
 $("#calculate-btn").click(function(e){
-
+    
     calculateModel();
 });
 
@@ -22,7 +22,14 @@ $('#clear-btn').click(function(e){
     diagram.clear();
 });
 
+$("#results-btn").click(function(){
+
+    Actions.showSystemResults();
+});
+
 function calculateModel(){
+
+    $("#spinner").fadeIn()
 
     let model = diagram.prepareSystemModel();
     console.log(model);
@@ -42,6 +49,10 @@ function calculateModel(){
     }
 
     $.ajax(settings).done(function (res) {
+
+        setTimeout(() => {
+            $("#spinner").fadeOut();
+        }, 1000);
 
         console.log(res);
         let {devices, flows, shafts} = res;
@@ -71,6 +82,10 @@ function calculateModel(){
         Actions.modelCalculated();
 
     }).fail(function (res, st, err) {
+
+        setTimeout(() => {
+            $("#spinner").fadeOut();
+        }, 1000);
 
         console.log(res, st, err)
     });

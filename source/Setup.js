@@ -20,7 +20,7 @@ function formatFixed(vl, p) {
     return str;
 }
 
-class Unit {
+export class Unit {
 
     constructor(name, label, _render, _edit) {
 

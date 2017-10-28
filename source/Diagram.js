@@ -1,5 +1,6 @@
 import { units } from "./Setup";
 import * as grid from "./Grid";
+import dispatcher from "./Dispatcher";
 import { FlowType, FlowOutlet, FlowDirection, Flow } from "./Flow";
 import { Coupling, Shaft } from "./Shaft";
 import Paper from "paper";
@@ -66,6 +67,17 @@ export function on(ev, func) {
         listeners[ev] = [func];
     }
 }
+
+function handleActions(action) {
+
+    switch(action.type){
+        case "MODEL_CALCULATED":
+            shafts.map(shaft => shaft.showResults() )
+            break;
+    }
+}
+
+dispatcher.register(handleActions);
 
 function executeListenersOfEvent(e_name, e_data) {
 

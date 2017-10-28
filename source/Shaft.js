@@ -1,7 +1,8 @@
 import Paper from "paper";
-import geometry from "./Geometry";
-import { units } from "./Setup";
+import * as geometry from "./Geometry";
 import * as diagram from "./Diagram";
+import * as drawing from "./Drawing";
+import { units } from "./Setup";
 
 export const ShaftOrientation = {
     Horizontal: 0,
@@ -147,7 +148,7 @@ export class Shaft {
     showResults() {
 
         diagram.shaftLayer.activate();
-        var unit = units.w;
+        var unit = units.w[0];
         var options = {
             justification: 'left',
             fontFamily: 'sans-serif',
@@ -171,6 +172,7 @@ export class Shaft {
 
             var sp = this.startPoint.location();
             var ep = this.endPoint.location();
+
             var p1 = dc.getShaftEnter(cp);
             var p2 = dc.getShaftExit(cp);
 
@@ -214,14 +216,14 @@ export class Shaft {
             var line = new Path.Line(ls, le);
             line.strokeColor = lcolor;
             line.strokeWidth = 1.0;
-
-            var ar = drawArrow(ls, le, lcolor, 7, 6);
+            
+            var ar = drawing.createArrowHead(ls, le, lcolor, 7, 6);
 
             rlabels.push(rl);
             rlabels.push(line);
             rlabels.push(ar);
         }
-
+        
         this.rlabels = rlabels;
         diagram.baseLayer.activate();
     }

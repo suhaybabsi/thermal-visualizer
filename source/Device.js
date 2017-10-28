@@ -52,6 +52,22 @@ export default class Device extends Paper.Group {
         diagram.devices.push(this);
     }
 
+    getShaftEnter(cpl) {
+        var hp = (cpl.isHorizontal())
+            ? new Point(this.bounds.width * 0.5, 0)
+            : new Point(0, this.bounds.height * 0.5);
+
+        return cpl.location().subtract(hp);
+    }
+
+    getShaftExit(cpl) {
+        var hp = (cpl.isHorizontal())
+            ? new Point(this.bounds.width * 0.5, 0)
+            : new Point(0, this.bounds.height * 0.5);
+
+        return cpl.location().add(hp);
+    }
+
     build(config) {
 
         let shape = this.config.build();

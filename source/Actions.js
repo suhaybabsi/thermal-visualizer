@@ -5,3 +5,9 @@ export function modelCalculated() {
         type: "MODEL_CALCULATED"
     });
 }
+
+export function showSystemResults() {
+    dispatcher.dispatch({
+        type: "OPEN_RESULTS"
+    });
+}

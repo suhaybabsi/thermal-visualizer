@@ -24,7 +24,7 @@ diagram.on("ready", function () {
     burner.position = new Point(420, 120);
     turbine.position = new Point(550, 200);
     exhaust.position = new Point(700, 120);
-    load.position = new Point(670, 200);
+    load.position = new Point(710, 200);
 
     new Flow(intake.flowOutlets[0], compressor.flowOutlets[0]);
     new Flow(compressor.flowOutlets[1], burner.flowOutlets[0]);

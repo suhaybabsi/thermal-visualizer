@@ -12,7 +12,7 @@ export default class UnitField extends UIField {
 
     this.setState({
       checked: checked,
-      value: unit.render(result || value)
+      value: unit.print(result || value)
     });
   }
 

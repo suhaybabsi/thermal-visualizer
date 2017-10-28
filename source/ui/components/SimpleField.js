@@ -1,4 +1,5 @@
 import React from "react";
+import { format } from "../../Setup";
 import UIField from "./UIField";
 
 export default class SimpleField extends UIField {
@@ -10,7 +11,7 @@ export default class SimpleField extends UIField {
 
     this.setState({
       checked: checked,
-      value: result || value
+      value: format(result || value)
     });
   }
 

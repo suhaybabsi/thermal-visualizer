@@ -24,6 +24,8 @@ export default class UnitComboField extends UIField {
   optionSelected(option) {
 
     let org_val = this.props.field.value;
+    org_val = org_val || this.props.field.result;
+
     this.setState({
       unit: option,
       value: option.print(org_val)

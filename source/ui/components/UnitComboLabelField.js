@@ -18,6 +18,8 @@ export default class UnitComboLabelField extends UIField {
 
   optionSelected(unit) {
     let org_val = this.props.field.value;
+    org_val = org_val || this.props.field.result;
+    
     this.setState({
       unit: unit,
       value: unit.print(org_val)

@@ -8,7 +8,7 @@ function exactFunction() {
 function factorFunction(factor) {
     return (vl) => vl * factor;
 }
-function format(vl, p) {
+export function format(vl, p) {
     var cp = (p) ? p : 5;
     var str = isNaN(vl) ? "N/A" : Number(vl).toPrecision(cp);
     return str;

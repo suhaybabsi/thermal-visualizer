@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="55" height="40" viewBox="0, 0, 55, 40">
+  <defs>
+    <linearGradient id="Gradient_1" gradientUnits="userSpaceOnUse" x1="4.667" y1="9.894" x2="4.667" y2="32.53">
+      <stop offset="0" stop-color="#696969"/>
+      <stop offset="0.438" stop-color="#939393"/>
+      <stop offset="1" stop-color="#2D2D2D"/>
+    </linearGradient>
+    <linearGradient id="Gradient_2" gradientUnits="userSpaceOnUse" x1="9.676" y1="19.817" x2="27.993" y2="19.817">
+      <stop offset="0" stop-color="#2B2B2B"/>
+      <stop offset="1" stop-color="#808080"/>
+    </linearGradient>
+    <linearGradient id="Gradient_3" gradientUnits="userSpaceOnUse" x1="9.176" y1="19" x2="32.402" y2="19">
+      <stop offset="0" stop-color="#00D3A6" stop-opacity="0"/>
+      <stop offset="0.627" stop-color="#00D3A6"/>
+    </linearGradient>
+  </defs>
+  <g id="outside_icon" transform="translate(0, 0)">
+    <g>
+      <path d="M18.5,9.817 L18.5,29.817 L1.354,29.817 C2.186,28.272 1.777,28.948 2.544,27.767 C4.185,25.358 4.365,23.64 3.521,21.588 C3.338,21.144 3.123,20.7 2.674,19.798 C2.141,18.7 1.831,17.894 1.627,16.946 C1.091,13.68 2.246,12.219 4.224,9.817 L18.5,9.817 z" fill="url(#Gradient_1)"/>
+      <path d="M18.5,9.817 L18.5,29.817 L1.354,29.817 C2.186,28.272 1.777,28.948 2.544,27.767 C4.185,25.358 4.365,23.64 3.521,21.588 C3.338,21.144 3.123,20.7 2.674,19.798 C2.141,18.7 1.831,17.894 1.627,16.946 C1.091,13.68 2.246,12.219 4.224,9.817 L18.5,9.817 z" fill-opacity="0" stroke="#808080" stroke-width="1"/>
+    </g>
+    <g>
+      <path d="M18.835,29.817 C13.777,29.817 9.676,25.34 9.676,19.817 C9.676,14.294 13.777,9.817 18.835,9.817 C23.893,9.817 27.993,14.294 27.993,19.817 C27.993,25.34 23.893,29.817 18.835,29.817 z" fill="url(#Gradient_2)"/>
+      <path d="M18.835,29.817 C13.777,29.817 9.676,25.34 9.676,19.817 C9.676,14.294 13.777,9.817 18.835,9.817 C23.893,9.817 27.993,14.294 27.993,19.817 C27.993,25.34 23.893,29.817 18.835,29.817 z" fill-opacity="0" stroke="#808080" stroke-width="1"/>
+    </g>
+    <path d="M32.402,7.425 L54.552,19.086 L32.402,30.575 L32.402,23.727 L9.176,23.727 L9.176,14.273 L32.402,14.273 L32.402,7.425 z" fill="url(#Gradient_3)"/>
+  </g>
+</svg>

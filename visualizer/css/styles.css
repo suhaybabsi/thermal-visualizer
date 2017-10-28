@@ -1,0 +1,230 @@
+body {
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+}
+
+#board {
+
+    position: fixed;
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    background: #efefef;
+}
+
+#device-editor {
+
+    position: fixed;
+    display: block;
+
+    left: 5pt;
+    bottom: 50px;
+
+    width: 220pt;
+    height: 350pt;
+
+    background: floralwhite;
+    border: 1pt solid lightgray;
+
+    box-shadow: 0 3pt 3pt grey;
+
+    z-index: 50;
+}
+
+.editor-header {
+
+    position: relative;
+    width: 100%;
+    height: 40px;
+
+    padding: 8pt 0 0 10pt;
+    font-weight: bold;
+
+    border-bottom: 1pt solid lightgray;
+
+    font-size: 11pt;
+}
+
+.editor-content {
+
+    position: absolute;
+    display: block;
+
+    top: 40px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    padding: 10pt 10pt 30pt 10pt;
+    overflow: scroll;
+}
+
+.editor-header .close-btn {
+
+    position: absolute;
+    right: 0pt;
+    top: 2pt;
+    color: darkgrey;
+}
+
+#chart-layer {
+    
+    z-index: 70;
+}
+
+.example-appear {
+  opacity: 0.01;
+  bottom: -200px;
+}
+
+.example-appear.example-appear-active {
+  opacity: 1;
+  bottom: 50px;
+  transition: .5s ease-out;
+}
+
+#build-panel {
+
+    position: fixed;
+    height: 40pt;
+    
+    top: 0;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+
+    text-align: center;
+    padding: 7pt 10pt 5pt 10pt;
+    background: white;
+
+    padding: 0 25pt 0 25pt;
+    box-shadow:2px 2px 4px #ddd;
+
+    z-index: 30;
+}
+
+.devices-btns-container {
+    
+    display: inline-block;
+   
+    width: 100%;
+    height: 100%;
+    
+    overflow-x: hidden;
+    overflow-y: hidden;
+    
+    padding-top: 6pt;
+    padding-left: 3pt;
+    padding-right: 3pt;
+}
+
+.devices-btns-container div {
+    
+    display: inline-block;
+    
+    left:0;
+    right:0;
+    margin-left: auto;
+    margin-right: auto;
+    
+    width:665pt;
+    text-align: left;
+    padding: 0 0 0 0;
+}
+
+.device-btn {
+
+    width: 34pt;
+    height: 27pt;
+
+    padding: 0 0 0 0;
+    border: 1pt solid white;
+    margin: 0 0 0 0;
+}
+
+.device-btn img {
+    
+    width: 30pt;
+    height: 24pt;
+}
+
+.btn.btn-default {
+    
+    color: #555;
+}
+
+#left-btn {
+    left: 0;
+    padding-left: 5pt;
+}
+
+#right-btn {
+    right: 0;
+    padding-right: 5pt;
+}
+
+.arrow-btn {
+
+    display: block;
+    position: absolute;
+
+    top: 5pt;
+    width: 25pt;
+    height: 30pt;
+    border: none !important;
+
+    z-index: 100;
+}
+
+.control-panel {
+
+    position: fixed;
+
+    bottom: 0pt;
+    left: 0pt;
+    width: 100%;
+    height: 46pt;
+
+    text-align: center;
+
+    z-index: 100;
+
+    padding: 9pt 0 6pt 0;
+    background-color: white;
+    box-shadow:2px -2px 4px #ddd;
+}
+
+.control-panel .btn.btn-default{
+    
+    padding-left: 7pt;
+    padding-right: 7pt;
+}
+
+.view-selection {
+    
+   position: fixed;
+   display: block;
+   
+   width: auto;
+   height: auto;
+   
+   right: 10px;
+   top: 9px;
+   
+   z-index: 250;
+}
+
+.view-edit {
+    
+    display: inline-block;
+    width: auto;
+}
+.view-item {
+    
+    margin-top: 5pt;
+}
+

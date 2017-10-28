@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="55" height="40" viewBox="0, 0, 55, 40">
+  <g id="extraction_icon" transform="translate(0, 0)">
+    <path d="M27.5,20.375 C22.806,20.375 19,16.569 19,11.875 C19,7.181 22.806,3.375 27.5,3.375 C32.194,3.375 36,7.181 36,11.875 C36,16.569 32.194,20.375 27.5,20.375 z" fill="#00D0A4"/>
+    <path d="M17,11 L17,13 L0,13 L0,11 L17,11 z" fill="#AAAAAA"/>
+    <path d="M55,10.875 L55,12.875 L38,12.875 L38,10.875 L55,10.875 z" fill="#AAAAAA"/>
+    <path d="M28.5,22.5 L28.5,40 L26.5,40 L26.5,22.5 L28.5,22.5 z" fill="#AAAAAA"/>
+    <path d="M4.75,15.25 L4.75,8.75 L11.25,11.895 L11.25,11.895 L4.75,15.25 z" fill="#808080"/>
+    <path d="M24.25,28.75 L30.75,28.75 L27.605,35.25 L27.605,35.25 L24.25,28.75 z" fill="#808080"/>
+    <path d="M44.75,15.125 L44.75,8.625 L51.25,11.77 L51.25,11.77 L44.75,15.125 z" fill="#808080"/>
+  </g>
+</svg>

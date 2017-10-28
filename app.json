@@ -1,0 +1,8 @@
+{
+  "name": "Thermal Visualizer : NodeJS",
+  "description": "Research tool to model and visualize thermal systems",
+  "repository": "https://github.com/suhaybabsi/thermal-visualizer",
+  "logo": "",
+  "keywords": ["node", "express", "heroku"],
+  "image": "heroku/nodejs"
+}

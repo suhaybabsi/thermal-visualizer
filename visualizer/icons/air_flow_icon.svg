@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="55" height="40" viewBox="0, 0, 55, 40">
+  <defs>
+    <linearGradient id="Gradient_1" gradientUnits="userSpaceOnUse" x1="5.125" y1="31.833" x2="49.127" y2="31.856">
+      <stop offset="0" stop-color="#00D3A6" stop-opacity="0"/>
+      <stop offset="0.459" stop-color="#00D3A6"/>
+    </linearGradient>
+    <linearGradient id="Gradient_2" gradientUnits="userSpaceOnUse" x1="5.125" y1="19.833" x2="49.127" y2="19.856">
+      <stop offset="0" stop-color="#00D3A6" stop-opacity="0"/>
+      <stop offset="0.459" stop-color="#00D3A6"/>
+    </linearGradient>
+    <linearGradient id="Gradient_3" gradientUnits="userSpaceOnUse" x1="5.125" y1="7.833" x2="49.127" y2="7.856">
+      <stop offset="0" stop-color="#00D3A6" stop-opacity="0"/>
+      <stop offset="0.459" stop-color="#00D3A6"/>
+    </linearGradient>
+  </defs>
+  <g id="air_flow_icon" transform="translate(0, 0)">
+    <g>
+      <path d="M5.585,30.103 L40.213,30.103 L40.213,27.367 L49.415,32.066 L40.213,36.633 L40.213,33.922 L5.585,33.922 L5.585,30.103 z" fill="url(#Gradient_1)"/>
+      <path d="M5.585,18.103 L40.213,18.103 L40.213,15.367 L49.415,20.066 L40.213,24.633 L40.213,21.922 L5.585,21.922 L5.585,18.103 z" fill="url(#Gradient_2)"/>
+      <path d="M5.585,6.103 L40.213,6.103 L40.213,3.367 L49.415,8.066 L40.213,12.633 L40.213,9.922 L5.585,9.922 L5.585,6.103 z" fill="url(#Gradient_3)"/>
+    </g>
+  </g>
+</svg>

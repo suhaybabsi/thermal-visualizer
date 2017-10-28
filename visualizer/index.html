@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Thermal Visualizer</title>
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- <link href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" /> -->
+    <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" />
+</head>
+
+<body>
+    <canvas id="board"></canvas>
+    <div id="build-panel">
+        <button id="left-btn" type="button" class="btn btn-default arrow-btn">
+                    <i class="fa fa-chevron-left"></i>
+                </button>
+        <div class="devices-btns-container">
+            <div>
+                <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Air Flow" device="air_flow">
+                        <img src="icons/air_flow_icon.svg" />
+                    </button>
+                <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Air intake"
+                    device="intake">
+                        <img src="icons/intake_icon.svg" />
+                    </button>
+                <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Diffuser" device="diffuser">
+                        <img src="icons/diffuser_icon.svg" />
+                    </button>
+                <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Air Compressor"
+                    device="compressor">
+                        <img src="icons/compressor_icon.svg" />
+                    </button>
+                <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Load" device="generator">
+                        <img src="icons/generator_icon.svg" />
+                    </button>
+                <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Combustion Chamber"
+                    device="burner">
+                        <img src="icons/burner_icon.svg" />
+                    </button>
+                <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Gas Turbine"
+                    device="gas_turbine">
+                        <img src="icons/gas_turbine_icon.svg" />
+                    </button>
+                <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Nozzle" device="nozzle">
+                        <img src="icons/nozzle_icon.svg" />
+                    </button>
+                <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Exhaust Gases"
+                    device="exhaust">
+                        <img src="icons/exhaust_icon.svg" />
+                    </button>
+                <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Heat Exchanger"
+                    device="heat_exchanger">
+                        <img src="icons/heat_exchanger_icon.svg" />
+                    </button>
+                <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Intercooler"
+                    device="intercooler">
+                        <img src="icons/intercooler_icon.svg" />
+                    </button>
+                <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Boiler" device="boiler">
+                        <img src="icons/boiler_icon.svg" />
+                    </button>
+                <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Pump" device="pump">
+                        <img src="icons/pump_icon.svg" />
+                    </button>
+                <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Steam Turbine"
+                    device="steam_turbine">
+                        <img src="icons/steam_turbine_icon.svg" />
+                    </button>
+                <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Condenser"
+                    device="condenser">
+                        <img src="icons/condenser_icon.svg" />
+                    </button>
+                <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Open Feed Water Heater"
+                    device="open_feed_heater">
+                        <img src="icons/open_feed_heater_icon.svg" />
+                    </button>
+                <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Closed Feed Water Heater"
+                    device="closed_feed_heater">
+                        <img src="icons/closed_feed_heater_icon.svg" />
+                    </button>
+                <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Mixing Chamber"
+                    device="mixing_chamber">
+                        <img src="icons/mixing_chamber_icon.svg" />
+                    </button>
+            </div>
+        </div>
+        <button id="right-btn" type="button" class="btn btn-default arrow-btn">
+                    <i class="fa fa-chevron-right"></i>
+                </button>
+    </div>
+    <div id="editor-layer"></div>
+    <div id="chart-layer">
+        <canvas id="chart" width="600" height="400"></canvas>
+    </div>
+    <div class="control-panel">
+        <div id="design-menu" class="btn-group dropup">
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Design</button>
+            <ul class="dropdown-menu">
+                <li><a id="add-label-btn" href="#"><i class="fa fa-align-left"></i>&nbsp;&nbsp;Add Result Label</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#" data-toggle="modal" data-target="#config-dialog">
+                                <i class="fa fa-magic"></i>&nbsp;&nbsp;Start with configuration</a>
+                </li>
+                <li role="separator" class="divider"></li>
+                <li><a id="clear-btn" href="#"><i class="fa fa-bolt"></i>&nbsp;&nbsp;Clear</a></li>
+            </ul>
+        </div>
+        <button id="calculate-btn" class="btn btn-default">
+                    <i class="fa fa-calculator"></i>&nbsp;Calculate</button>
+        <button id="results-btn" class="btn btn-default">
+                    <i class="fa fa-line-chart"></i>&nbsp;&nbsp;Results</button>
+
+        <span style="display: inline-block;width: 10px;"></span>
+        <span>Views&nbsp;</span>
+        <div class="view-edit">
+            <div id="views-combo" class="btn-group dropup">
+                <button type="button" class="btn btn-default">Base View</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                <ul class="dropdown-menu"></ul>
+            </div>
+        </div>
+        <a id="edit-views-btn" href="#" class="btn btn-default" role="button"><i class="fa fa-pencil-square-o"></i>&nbsp;&nbsp;Edit</a>
+    </div>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="js/thermal-visualizer.min.js"></script>
+</body>
+
+</html>

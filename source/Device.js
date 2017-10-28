@@ -69,7 +69,6 @@ export default class Device extends Paper.Group {
             text.justification = "center";
             text.pivot = text.bounds.center;
             text.position = this.bounds.center;
-            text.locked = true;
             this.addChild(text);
         }
     }

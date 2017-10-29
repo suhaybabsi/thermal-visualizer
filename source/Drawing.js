@@ -13,6 +13,7 @@ export function createArrowHead(ps, pe, ac, aw, ah) {
     head.lineTo(-w, -h / 2.0);
     head.lineTo(-w, h / 2.0);
     head.closePath();
+    head.pivot = new Point(0, 0);
 
     var ang = pe.subtract(ps).angle;
     head.rotate(ang);

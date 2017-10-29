@@ -226,10 +226,10 @@ function tryHideLoadingScreen(){
     }
 }*/
 
-function useHandCursor() {
+export function useHandCursor() {
     $('#board').css('cursor', 'pointer');
 }
-function resetCursor() {
+export function resetCursor() {
     $('#board').css('cursor', 'auto');
 }
 

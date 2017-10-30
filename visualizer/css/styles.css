@@ -3,6 +3,23 @@ body {
     padding: 0 0 0 0;
 }
 
+.modal-header h4.modal-title {
+    
+    margin-left: 27pt;
+}
+
+div.fa.fa-magic {
+    
+    position: absolute;
+    
+    width: 30px;
+    height: 30px;
+    font-size: 20pt;
+    margin-top: -17pt;
+    
+    color: gray;
+}
+
 #board {
 
     position: fixed;

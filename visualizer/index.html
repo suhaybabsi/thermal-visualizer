@@ -12,84 +12,102 @@
 </head>
 
 <body>
+    <div id="config-dialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="config-dialog-title">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="config-dialog-title">Configurations</h4>
+                    <div class="fa fa-magic"></div>
+                </div>
+                <div class="modal-body">
+                    <div class="list-group">
+                        <a href="#" class="list-group-item" conf="0">Simple</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <canvas id="board"></canvas>
     <div id="build-panel">
         <button id="left-btn" type="button" class="btn btn-default arrow-btn">
-                    <i class="fa fa-chevron-left"></i>
-                </button>
+            <i class="fa fa-chevron-left"></i>
+        </button>
         <div class="devices-btns-container">
             <div>
                 <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Air Flow" device="air_flow">
-                        <img src="icons/air_flow_icon.svg" />
-                    </button>
+                    <img src="icons/air_flow_icon.svg" />
+                </button>
                 <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Air intake"
                     device="intake">
-                        <img src="icons/intake_icon.svg" />
-                    </button>
+                    <img src="icons/intake_icon.svg" />
+                </button>
                 <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Diffuser" device="diffuser">
-                        <img src="icons/diffuser_icon.svg" />
-                    </button>
+                    <img src="icons/diffuser_icon.svg" />
+                </button>
                 <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Air Compressor"
                     device="compressor">
-                        <img src="icons/compressor_icon.svg" />
-                    </button>
+                    <img src="icons/compressor_icon.svg" />
+                </button>
                 <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Load" device="generator">
-                        <img src="icons/generator_icon.svg" />
-                    </button>
+                    <img src="icons/generator_icon.svg" />
+                </button>
                 <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Combustion Chamber"
                     device="burner">
-                        <img src="icons/burner_icon.svg" />
-                    </button>
+                    <img src="icons/burner_icon.svg" />
+                </button>
                 <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Gas Turbine"
                     device="gas_turbine">
-                        <img src="icons/gas_turbine_icon.svg" />
-                    </button>
+                    <img src="icons/gas_turbine_icon.svg" />
+                </button>
                 <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Nozzle" device="nozzle">
-                        <img src="icons/nozzle_icon.svg" />
-                    </button>
+                    <img src="icons/nozzle_icon.svg" />
+                </button>
                 <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Exhaust Gases"
                     device="exhaust">
-                        <img src="icons/exhaust_icon.svg" />
-                    </button>
+                    <img src="icons/exhaust_icon.svg" />
+                </button>
                 <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Heat Exchanger"
                     device="heat_exchanger">
-                        <img src="icons/heat_exchanger_icon.svg" />
-                    </button>
+                    <img src="icons/heat_exchanger_icon.svg" />
+                </button>
                 <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Intercooler"
                     device="intercooler">
-                        <img src="icons/intercooler_icon.svg" />
-                    </button>
+                    <img src="icons/intercooler_icon.svg" />
+                </button>
                 <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Boiler" device="boiler">
-                        <img src="icons/boiler_icon.svg" />
-                    </button>
+                    <img src="icons/boiler_icon.svg" />
+                </button>
                 <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Pump" device="pump">
-                        <img src="icons/pump_icon.svg" />
-                    </button>
+                    <img src="icons/pump_icon.svg" />
+                </button>
                 <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Steam Turbine"
                     device="steam_turbine">
-                        <img src="icons/steam_turbine_icon.svg" />
-                    </button>
+                    <img src="icons/steam_turbine_icon.svg" />
+                </button>
                 <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Condenser"
                     device="condenser">
-                        <img src="icons/condenser_icon.svg" />
-                    </button>
+                    <img src="icons/condenser_icon.svg" />
+                </button>
                 <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Open Feed Water Heater"
                     device="open_feed_heater">
-                        <img src="icons/open_feed_heater_icon.svg" />
-                    </button>
+                    <img src="icons/open_feed_heater_icon.svg" />
+                </button>
                 <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Closed Feed Water Heater"
                     device="closed_feed_heater">
-                        <img src="icons/closed_feed_heater_icon.svg" />
-                    </button>
+                    <img src="icons/closed_feed_heater_icon.svg" />
+                </button>
                 <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Mixing Chamber"
                     device="mixing_chamber">
-                        <img src="icons/mixing_chamber_icon.svg" />
-                    </button>
+                    <img src="icons/mixing_chamber_icon.svg" />
+                </button>
             </div>
         </div>
         <button id="right-btn" type="button" class="btn btn-default arrow-btn">
-                    <i class="fa fa-chevron-right"></i>
-                </button>
+            <i class="fa fa-chevron-right"></i>
+        </button>
     </div>
     <div id="editor-layer"></div>
     <div id="results-layer"></div>
@@ -97,23 +115,15 @@
         <canvas id="chart" width="600" height="400"></canvas>
     </div>
     <div class="control-panel">
-        <div id="design-menu" class="btn-group dropup">
-            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Design</button>
-            <ul class="dropdown-menu">
-                <li><a id="add-label-btn" href="#"><i class="fa fa-align-left"></i>&nbsp;&nbsp;Add Result Label</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="#" data-toggle="modal" data-target="#config-dialog">
-                                <i class="fa fa-magic"></i>&nbsp;&nbsp;Start with configuration</a>
-                </li>
-                <li role="separator" class="divider"></li>
-                <li><a id="clear-btn" href="#"><i class="fa fa-bolt"></i>&nbsp;&nbsp;Clear</a></li>
-            </ul>
-        </div>
+        <button id="clear-btn" class="btn btn-default">
+            <i class="fa fa-bolt"></i>&nbsp;Clear</button>
+        <button class="btn btn-default" data-toggle="modal" data-target="#config-dialog">
+            <i class="fa fa-magic"></i>&nbsp;Configurations</button>
         <button id="calculate-btn" class="btn btn-default">
-                    <i class="fa fa-calculator"></i>&nbsp;Calculate</button>
+            <i class="fa fa-calculator"></i>&nbsp;Calculate</button>
         <button id="results-btn" class="btn btn-default">
-                    <i class="fa fa-line-chart"></i>&nbsp;&nbsp;Results</button>
-            <!--
+            <i class="fa fa-line-chart"></i>&nbsp;&nbsp;Results</button>
+        <!--
         <span style="display: inline-block;width: 10px;"></span>
         <span>Views&nbsp;</span>
         <div class="view-edit">
@@ -143,8 +153,8 @@
     </div>
     <!-- Start of Woopra Code - Please change to suit your domain -->
     <script>
-        (function(){
-                var t,i,e,n=window,o=document,a=arguments,s="script",r=["config","track","identify","visit","push","call","trackForm","trackClick"],c=function(){var t,i=this;for(i._e=[],t=0;r.length>t;t++)(function(t){i[t]=function(){return i._e.push([t].concat(Array.prototype.slice.call(arguments,0))),i}})(r[t])};for(n._w=n._w||{},t=0;a.length>t;t++)n._w[a[t]]=n[a[t]]=n[a[t]]||new c;i=o.createElement(s),i.async=1,i.src="//static.woopra.com/js/w.js",e=o.getElementsByTagName(s)[0],e.parentNode.insertBefore(i,e)
+        (function () {
+            var t, i, e, n = window, o = document, a = arguments, s = "script", r = ["config", "track", "identify", "visit", "push", "call", "trackForm", "trackClick"], c = function () { var t, i = this; for (i._e = [], t = 0; r.length > t; t++)(function (t) { i[t] = function () { return i._e.push([t].concat(Array.prototype.slice.call(arguments, 0))), i } })(r[t]) }; for (n._w = n._w || {}, t = 0; a.length > t; t++)n._w[a[t]] = n[a[t]] = n[a[t]] || new c; i = o.createElement(s), i.async = 1, i.src = "//static.woopra.com/js/w.js", e = o.getElementsByTagName(s)[0], e.parentNode.insertBefore(i, e)
         })("woopra");
 
         woopra.config({

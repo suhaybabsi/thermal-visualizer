@@ -92,6 +92,7 @@ export default class Device extends Paper.Group {
     clickHandler(e) {
         ReactDOM.unmountComponentAtNode(editorElm);
         ReactDOM.render(<DeviceEditor device={this} />, editorElm);
+        woopra.track("device_edited", {type: this.type});
     }
 
     mouseEnterHandler(e) {

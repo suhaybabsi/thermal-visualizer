@@ -25,6 +25,7 @@ $('#clear-btn').click(function(e){
 $("#results-btn").click(function(){
 
     Actions.showSystemResults();
+    woopra.track("results_shown");
 });
 
 function calculateModel(){
@@ -34,6 +35,12 @@ function calculateModel(){
     let model = diagram.prepareSystemModel();
     console.log(model);
     console.log(JSON.stringify(model));
+
+    let trackProps = {
+        devices_count: diagram.devices.length,
+        flows_count: diagram.flows.length,
+        shafts_count: diagram.shafts.length
+    };
     
     var settings = {
         "async": true,
@@ -81,12 +88,18 @@ function calculateModel(){
         console.log(diagram.devices);
         Actions.modelCalculated();
 
+        trackProps.success = "PASS";
+        woopra.track("machine_calculated", trackProps);
+
     }).fail(function (res, st, err) {
 
         setTimeout(() => {
             $("#spinner").fadeOut();
         }, 1000);
 
-        console.log(res, st, err)
+        console.log(res, st, err);
+
+        trackProps.success = "FAIL";
+        woopra.track("machine_calculated", trackProps);
     });
 }

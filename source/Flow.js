@@ -2,6 +2,7 @@ import Paper from "paper";
 import * as diagram from "./Diagram";
 import * as drawing from "./Drawing";
 import * as geometry from "./Geometry";
+import { units } from "./Setup";
 
 export const FlowType = {
     Stream: 0,
@@ -68,7 +69,7 @@ function verticallyWindingPath(path, p1, p2) {
     path.quadraticCurveTo(pc2, pc21);
     path.lineTo(p2);
 
-    return pc2;
+    return [pc11, pc1, pc12, pc22, pc2, pc21];
 }
 
 function horizontallyWindingPath(path, p1, p2) {
@@ -92,7 +93,7 @@ function horizontallyWindingPath(path, p1, p2) {
     path.quadraticCurveTo(pc2, pc21);
     path.lineTo(p2);
 
-    return pc2;
+    return [pc11, pc1, pc12, pc22, pc2, pc21];
 }
 
 function flatEndWindingPath(path, p1, p2) {
@@ -108,7 +109,7 @@ function flatEndWindingPath(path, p1, p2) {
     path.quadraticCurveTo(pc, pc2);
     path.lineTo(p2);
 
-    return pc2;
+    return [p1c, pc, pc2];
 }
 
 function flatStartWindingPath(path, p1, p2) {
@@ -124,7 +125,7 @@ function flatStartWindingPath(path, p1, p2) {
     path.quadraticCurveTo(pc, pc2);
     path.lineTo(p2);
 
-    return pc2;
+    return [p1c, pc, pc2];
 }
 
 let PathDrawers = [
@@ -152,6 +153,7 @@ export class Flow {
         this.srcOutlet.connect(this);
         this.destOutlet.connect(this);
         this.childrens = [];
+        this.node = new ThermalNode(this);
 
         this.render();
         diagram.addFlow(this);
@@ -161,16 +163,23 @@ export class Flow {
         if (this.border) { this.border.remove(); }
         this.childrens.map(child => child.remove());
         this.childrens = null;
+        this.node.remove();
         diagram.removeFlow(this);
     }
 
-    flip(){
+    flip() {
 
         let index = PathDrawers.indexOf(this.pathDrawer);
-        index = ( (index + 1) < PathDrawers.length) ? index + 1 : 0;
+        index = ((index + 1) < PathDrawers.length) ? index + 1 : 0;
         this.pathDrawer = PathDrawers[index];
         this.render();
 
+        return this;
+    }
+
+    displaceNode1Label(dx, dy){
+        this.node.labelDisplacement = new Point(dx, dy);
+        this.node.update();
         return this;
     }
 
@@ -178,7 +187,7 @@ export class Flow {
 
         let p1 = this.srcOutlet.location();
         let p2 = this.destOutlet.location();
-
+        
         let type = this.srcOutlet.type;
         let color = (type == FlowType.Stream)
             ? new Color(.9, .3, .1, .8)
@@ -194,7 +203,15 @@ export class Flow {
         path.strokeWidth = 1.5;
         path.locked = true;
 
-        let pe = this.pathDrawer(path, p1, p2);
+        let in_points = this.pathDrawer(path, p1, p2);
+        let pe = in_points[in_points.length - 2];
+        let pn = in_points[0];
+        let pnn = pn.subtract(p1).normalize().multiply(15);
+
+        this.node.firstChild.fillColor = color;
+        this.node.position = p1.add(pnn);
+        this.node.update();
+
         let arrow = drawing.createArrowHead(pe, p2, color);
         arrow.locked = true;
 
@@ -206,11 +223,11 @@ export class Flow {
         bPath.strokeWidth = 8.0;
         bPath.flow = this;
         bPath.opacity = 0;
-        bPath.on("mouseenter", function(){
+        bPath.on("mouseenter", function () {
             this.opacity = 1;
             diagram.useHandCursor(this);
         });
-        bPath.on("mouseleave", function(){
+        bPath.on("mouseleave", function () {
             this.opacity = 0;
             diagram.resetCursor(this);
         });
@@ -224,5 +241,107 @@ export class Flow {
         this.childrens.push(path, arrow, bPath);
 
         diagram.baseLayer.activate();
+    }
+}
+
+class ThermalLabel extends Paper.Group {
+
+    constructor(node) {
+        super();
+        this.node = node;
+
+        var temp = new Paper.PointText();
+        temp.fontSize = 12;
+        temp.fillColor = "red";
+        temp.point = new Point(0, 0);
+
+        var press = new Paper.PointText();
+        press.fontSize = 12;
+        press.fillColor = "red";
+        press.point = new Point(0, 20);
+
+        this.tLabel = temp;
+        this.pLabel = press;
+        this.pivot = new Point(0, 0);
+
+        this.addChild(press);
+        this.addChild(temp);
+        this.on("mousedrag", this.dragHandler);
+    }
+
+    dragHandler(e) {
+
+        this.position = this.position.add(e.delta);
+        let dp = this.node.labelDisplacement;
+        this.node.labelDisplacement = dp.add(e.delta);
+        this.drawLine();
+    }
+
+    remove(){
+        super.remove();
+        if(this.line){ this.line.remove(); }
+    }
+
+    drawLine(){
+
+        if(this.line){ this.line.remove(); }
+
+        let p1 = this.bounds.leftCenter;
+        let p2 = this.node.position;
+        
+        let line = new Paper.Path.Line(p1, p2);
+        line.strokeColor = new Color(0, 0, 0, 0.3);
+        line.dashArray = [3, 2];
+
+        this.line = line;
+    }
+
+    update(flow) {
+
+        let res = flow.results;
+        res = (res) ? res : {};
+
+        let tVal = (res.t) ? res.t : 0.0;
+        let pVal = (res.p) ? res.p : 0.0;
+
+        let unitT = units.t[0];
+        let unitP = units.p[0];
+        
+        this.tLabel.content = "T: " + unitT.printWithLabel(tVal);
+        this.pLabel.content = "P: " + unitP.printWithLabel(pVal);
+        this.drawLine();
+    }
+}
+
+class ThermalNode extends Paper.Group {
+
+    constructor(flow){
+        super();
+        this.flow = flow;
+        this.label = new ThermalLabel(this);
+        this.labelDisplacement = new Point(0,0);
+
+        let circle = new Paper.Path.Circle(new Point(0 ,0), 5);
+        circle.fillColor = new Color(1,0,0, 0.7);
+        this.addChild(circle);
+        this.label.update(flow);
+    }
+    
+    refresh() {
+        this.label.update(this.flow);
+    }
+
+    remove(){
+        super.remove();
+        this.label.remove();
+    }
+
+    update(){
+
+        let p = this.position;
+        this.label.position = p.add(this.labelDisplacement);
+        this.label.drawLine();
+
+        diagram.flowLayer.addChild(this.label);
     }
 }

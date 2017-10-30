@@ -26,10 +26,10 @@ diagram.on("ready", function () {
     exhaust.position = new Point(700, 120);
     load.position = new Point(710, 200);
 
-    new Flow(intake.flowOutlets[0], compressor.flowOutlets[0]);
-    new Flow(compressor.flowOutlets[1], burner.flowOutlets[0]).flip();
-    new Flow(burner.flowOutlets[1], turbine.flowOutlets[0]);
-    new Flow(turbine.flowOutlets[1], exhaust.flowOutlets[0]).flip();
+    new Flow(intake.flowOutlets[0], compressor.flowOutlets[0]).displaceNode1Label(16, -31);
+    new Flow(compressor.flowOutlets[1], burner.flowOutlets[0]).flip().displaceNode1Label(11, -19);
+    new Flow(burner.flowOutlets[1], turbine.flowOutlets[0]).displaceNode1Label(8, -29);
+    new Flow(turbine.flowOutlets[1], exhaust.flowOutlets[0]).flip().displaceNode1Label(12, -18);
     
     let shaft = new Shaft();
     shaft.addCoupling(compressor.shaftCouplings[0]);

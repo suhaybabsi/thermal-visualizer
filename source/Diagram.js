@@ -73,6 +73,7 @@ function handleActions(action) {
     switch(action.type){
         case "MODEL_CALCULATED":
             shafts.map(shaft => shaft.showResults() )
+            flows.map(flow => flow.node.refresh() )
             break;
     }
 }

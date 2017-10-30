@@ -563,6 +563,8 @@ function isShaftConnectedToPoint(dvc, c_cpl) {
 }
 
 export function clear(){
+
+    hideDeviceHandles();
     
     let _shafts = shafts.splice(0);
     let _flows = flows.splice(0);

@@ -12,23 +12,76 @@ $('.device-btn').click(function (e) {
     diagram.update();
 });
 
-$("#calculate-btn").click(function(e){
-    
+$("#calculate-btn").click(function (e) {
+
     calculateModel();
 });
 
-$('#clear-btn').click(function(e){
+$('#clear-btn').click(function (e) {
 
     diagram.clear();
 });
 
-$("#results-btn").click(function(){
+$("#results-btn").click(function () {
 
     Actions.showSystemResults();
     woopra.track("results_shown");
 });
 
-function calculateModel(){
+
+$("#left-btn").click(function () {
+
+    let scroll = $(".devices-btns-container").scrollLeft();
+
+    $(".devices-btns-container").finish();
+    $(".devices-btns-container").animate({
+        scrollLeft: scroll - 50
+    }, 200);
+});
+
+
+$("#right-btn").click(function () {
+
+    let scroll = $(".devices-btns-container").scrollLeft();
+    
+    $(".devices-btns-container").finish();
+    $(".devices-btns-container").animate({
+        scrollLeft: scroll + 50
+    }, 200);
+});
+
+$("#code-btn").click(function(){
+    window.open("https://github.com/suhaybabsi/thermal-visualizer",'_blank');
+});
+
+function validateDevicesNav() {
+
+    let width = $(".devices-btns-container").width();
+
+    console.log(width);
+
+    if (width < 860) {
+
+        $("#left-btn").show();
+        $("#right-btn").show();
+    } else {
+
+        $("#left-btn").hide();
+        $("#right-btn").hide();
+    }
+}
+
+$(document).ready(function () {
+
+    validateDevicesNav();
+});
+
+$(window).resize(function () {
+
+    validateDevicesNav();
+});
+
+function calculateModel() {
 
     $("#spinner").fadeIn()
 
@@ -41,7 +94,7 @@ function calculateModel(){
         flows_count: diagram.flows.length,
         shafts_count: diagram.shafts.length
     };
-    
+
     var settings = {
         "async": true,
         "crossDomain": true,
@@ -62,29 +115,29 @@ function calculateModel(){
         }, 1000);
 
         console.log(res);
-        let {devices, flows, shafts} = res;
-        
-        if(devices){
-            devices.map( (dvc, i) => {
+        let { devices, flows, shafts } = res;
+
+        if (devices) {
+            devices.map((dvc, i) => {
                 var t_dvc = diagram.devices[i];
                 t_dvc.results = dvc.res;
             });
         }
 
-        if(flows){
-            flows.map( (flow, i) => {
+        if (flows) {
+            flows.map((flow, i) => {
                 var t_flow = diagram.flows[i];
                 t_flow.results = flow.props;
             });
         }
 
-        if(shafts){
-            shafts.map( (shaft, i) => {
+        if (shafts) {
+            shafts.map((shaft, i) => {
                 var t_shaft = diagram.shafts[i];
                 t_shaft.results = shaft;
             });
         }
-        
+
         console.log(diagram.devices);
         Actions.modelCalculated();
 

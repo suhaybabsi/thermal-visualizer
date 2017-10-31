@@ -294,3 +294,10 @@ div.fa.fa-magic {
     height: 80px;
     background: white;
 }
+
+#code-btn {
+
+    position: absolute;
+
+    right: 10px;
+}

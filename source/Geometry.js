@@ -19,3 +19,29 @@ export function isPointBetween(p, p1, p2) {
     return pp1.angle === p2p1.angle
         && pp1.length < p2p1.length;
 }
+
+export function nearestCornerToPoint(rect, p){
+
+    let points = [
+        rect.topLeft,
+        rect.topRight,
+        rect.bottomLeft,
+        rect.bottomRight,
+        rect.topCenter,
+        rect.bottomCenter,
+        rect.leftCenter,
+        rect.rightCenter
+    ];
+
+    let tp = points[0];
+    let dist = p.getDistance(tp);
+    points.map(ep => {
+        let _dt = p.getDistance(ep);
+        if( _dt < dist){
+            tp = ep;
+            dist = _dt;
+        }
+    });
+    
+    return tp;
+}

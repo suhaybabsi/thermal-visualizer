@@ -286,11 +286,12 @@ class ThermalLabel extends Paper.Group {
 
         if(this.line){ this.line.remove(); }
 
-        let p1 = this.bounds.leftCenter;
-        let p2 = this.node.position;
+        let p1 = this.node.position;
+        let p2 = geometry.nearestCornerToPoint(this.bounds, p1);
+        p2 = p2.subtract( p2.subtract(p1).normalize().multiply(2) );
         
         let line = new Paper.Path.Line(p1, p2);
-        line.strokeColor = new Color(0, 0, 0, 0.3);
+        line.strokeColor = new Color(0, 0, 0, 0.35);
         line.dashArray = [3, 2];
 
         this.line = line;

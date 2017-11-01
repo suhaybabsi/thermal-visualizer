@@ -5,11 +5,12 @@ import DeviceEditor from "./ui/DeviceEditor";
 import { deviceConfigurations } from "./Setup";
 import * as diagram from "./Diagram";
 import { FlowType, FlowOutlet, FlowDirection } from "./Flow";
+import { ShaftOrientation } from "./Shaft";
 
 const editorElm = document.getElementById("editor-layer");
 
 export default class Device extends Paper.Group {
-    
+
     constructor(type, model) {
         diagram.baseLayer.activate();
         super();
@@ -26,7 +27,7 @@ export default class Device extends Paper.Group {
         this.model = model;
         this.type = type;
         this.name = config.name + " 1";
-        this.pivot = this.bounds.topLeft;
+        this.pivot = new Point(0, 0);
         this.results = null;
 
         if (config.outlets) {
@@ -48,7 +49,8 @@ export default class Device extends Paper.Group {
         this.build(config);
         this.on("mouseenter", this.mouseEnterHandler);
         this.on("mousedrag", this.dragHandler);
-        this.on("doubleclick", this.clickHandler);
+        this.on("doubleclick", this.doubleClickHandler);
+        this.on("click", this.clickHandler);
         diagram.devices.push(this);
     }
 
@@ -85,16 +87,18 @@ export default class Device extends Paper.Group {
             text.justification = "center";
             text.pivot = text.bounds.center;
             text.position = this.bounds.center;
+            this.text = text;
             this.addChild(text);
         }
     }
 
-    clickHandler(e) {
+    doubleClickHandler(e) {
         ReactDOM.unmountComponentAtNode(editorElm);
         ReactDOM.render(<DeviceEditor device={this} />, editorElm);
-        woopra.track("device_edited", {type: this.type});
+        woopra.track("device_edited", { type: this.type });
     }
 
+    clickHandler(e) {}
     mouseEnterHandler(e) {
         if (!diagram.isMouseDown) {
             diagram.revealDeviceHandles(this);
@@ -103,11 +107,12 @@ export default class Device extends Paper.Group {
 
     dragHandler(e) {
 
-        if( !diagram.doDragGrid ) {
+        if (!diagram.doDragGrid) {
             let newPoint = this.position.add(e.delta);
             this.position = newPoint;
             this.updateFlows();
             this.updateShafts();
+            console.log(newPoint);
         }
     }
 
@@ -130,5 +135,45 @@ export default class Device extends Paper.Group {
     updateLocation(point) {
         this.position = point;
         this.updateFlows();
+    }
+
+    performRotation(ang) {
+
+        let cp = this.bounds.center;
+        let pos = this.position.rotate(ang, cp);
+        this.flowOutlets.map(op => {
+            let dest = op.location();
+            op.delta = dest.rotate(ang, cp).subtract(pos);
+        });
+
+        this.shaftCouplings.map(cpl => {
+            if(cpl.orientation == ShaftOrientation.Horizontal){
+                cpl.orientation = ShaftOrientation.Vertical;
+            } else {
+                cpl.orientation = ShaftOrientation.Horizontal;
+            }
+        });
+
+        this.rotate(ang, cp);
+        let dp = this.pivot.subtract(this.bounds.topLeft);
+        this.pivot = this.bounds.topLeft;
+
+        this.flowOutlets.map(op => {
+            op.delta = op.delta.add(dp);
+            if(op.flow){ op.flow.render(); }
+        });
+
+        if(this.text){
+            this.text.rotate(-ang);
+        }
+    }
+
+    turn(times = 1){
+
+        let num = (times > 0) ? times : 1;
+        for(var i=0; i < num; i++){
+            this.performRotation(90);
+        }
+        return this;
     }
 }

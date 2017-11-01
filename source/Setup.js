@@ -300,10 +300,10 @@ export let deviceConfigurations = {
             new Field("Xeff", "Second Law Efficiency", null, FieldType.UNIT, percentUnit)
         ],
         outlets: [
-            new OutletConfig(FlowType.Stream, FlowDirection.IN, 0, 10),
-            new OutletConfig(FlowType.Stream, FlowDirection.OUT, 60, 10),
-            new OutletConfig(FlowType.Stream, FlowDirection.IN, 60, 40),
-            new OutletConfig(FlowType.Stream, FlowDirection.OUT, 0, 40)
+            new OutletConfig(FlowType.Stream, FlowDirection.IN, 0, 40),
+            new OutletConfig(FlowType.Stream, FlowDirection.OUT, 60, 40),
+            new OutletConfig(FlowType.Stream, FlowDirection.IN, 60, 10),
+            new OutletConfig(FlowType.Stream, FlowDirection.OUT, 0, 10)
         ]
     },
     intercooler: {

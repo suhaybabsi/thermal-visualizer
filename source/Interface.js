@@ -10,6 +10,8 @@ $('.device-btn').click(function (e) {
     let device = new Device(dvcType);
     device.position = diagram.viewCenter();
     diagram.update();
+
+    $(this).blur();
 });
 
 $("#calculate-btn").click(function (e) {

@@ -24,12 +24,24 @@ export class FlowOutlet {
         this.flow = flow;
     }
 
+    disconnect() {
+        this.flow = null;
+    }
+
     isConnected() {
         return this.flow != null;
     }
 
     location() {
         return this.device.position.add(this.delta);
+    }
+
+    clear(){
+        delete this.device;
+        delete this.delta;
+        delete this.type;
+        delete this.direction;
+        delete this.flow;
     }
 }
 
@@ -164,6 +176,10 @@ export class Flow {
         this.childrens.map(child => child.remove());
         this.childrens = null;
         this.node.remove();
+        this.srcOutlet.disconnect();
+        this.destOutlet.disconnect();
+        this.srcOutlet = null;
+        this.destOutlet = null;
         diagram.removeFlow(this);
     }
 
@@ -244,6 +260,40 @@ export class Flow {
     }
 }
 
+class ThermalNode extends Paper.Group {
+
+    constructor(flow){
+        super();
+        this.flow = flow;
+        this.label = new ThermalLabel(this);
+        this.labelDisplacement = new Point(0,0);
+
+        let circle = new Paper.Path.Circle(new Point(0 ,0), 5);
+        circle.fillColor = new Color(1,0,0, 0.7);
+        this.addChild(circle);
+        this.label.update(flow);
+    }
+    
+    refresh() {
+        this.label.update(this.flow);
+    }
+
+    remove(){
+        super.remove();
+        this.label.remove();
+    }
+
+    update(){
+
+        let p = this.position;
+        this.label.position = p.add(this.labelDisplacement);
+        this.label.drawLine();
+
+        diagram.flowLayer.addChild(this.label);
+    }
+}
+
+
 class ThermalLabel extends Paper.Group {
 
     constructor(node) {
@@ -305,44 +355,11 @@ class ThermalLabel extends Paper.Group {
         let tVal = (res.t) ? res.t : 0.0;
         let pVal = (res.p) ? res.p : 0.0;
 
-        let unitT = units.t[0];
-        let unitP = units.p[0];
+        let unitT = diagram.selectedUnits.t;
+        let unitP = diagram.selectedUnits.p;
         
         this.tLabel.content = "T: " + unitT.printWithLabel(tVal);
         this.pLabel.content = "P: " + unitP.printWithLabel(pVal);
         this.drawLine();
-    }
-}
-
-class ThermalNode extends Paper.Group {
-
-    constructor(flow){
-        super();
-        this.flow = flow;
-        this.label = new ThermalLabel(this);
-        this.labelDisplacement = new Point(0,0);
-
-        let circle = new Paper.Path.Circle(new Point(0 ,0), 5);
-        circle.fillColor = new Color(1,0,0, 0.7);
-        this.addChild(circle);
-        this.label.update(flow);
-    }
-    
-    refresh() {
-        this.label.update(this.flow);
-    }
-
-    remove(){
-        super.remove();
-        this.label.remove();
-    }
-
-    update(){
-
-        let p = this.position;
-        this.label.position = p.add(this.labelDisplacement);
-        this.label.drawLine();
-
-        diagram.flowLayer.addChild(this.label);
     }
 }

@@ -117,7 +117,7 @@ export class Shaft {
         var pg = cplPoints[0].location();
         var pf = cplPoints[cplPoints.length - 1].location();
 
-        var t = 8;
+        var t = 7;
         var dp = ( this.isHorizontal() ) ? new Point(0, t / 2) : new Point(t / 2, 0);
         pi = pi.subtract(dp);
         pg = pg.add(dp);
@@ -132,12 +132,12 @@ export class Shaft {
         this.path.style = {
             fillColor: {
                 gradient: {
-                    stops: [[.3, .3, .3, .8], [.6, .6, .6, .8]]
+                    stops: [[.5, .5, .5, .8], [.65, .65, .65, .8]]
                 },
                 origin: pi,
                 destination: pg
             },
-            strokeColor: [.4, .4, .4],
+            strokeColor: [.45, .45, .45],
             strokeWidth: 1
         };
 
@@ -254,7 +254,9 @@ export class Shaft {
     removeCoupling(cpl) {
 
         if (this.couplings.length === 2) {
+            
             this.delete();
+
         } else {
             
             var index = this.couplings.indexOf(cpl);
@@ -263,7 +265,6 @@ export class Shaft {
             if (this.results) {
                 this.results.splice(index, 1);
             }
-
             this.render();
         }
     }

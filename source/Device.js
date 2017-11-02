@@ -1,13 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Paper from "paper";
-import DeviceEditor from "./ui/DeviceEditor";
 import { deviceConfigurations } from "./Setup";
 import * as diagram from "./Diagram";
 import { FlowType, FlowOutlet, FlowDirection } from "./Flow";
 import { ShaftOrientation } from "./Shaft";
-
-const editorElm = document.getElementById("editor-layer");
+import * as selection from "./Selection";
+import * as Actions from "./Actions";
 
 export default class Device extends Paper.Group {
 
@@ -93,12 +92,14 @@ export default class Device extends Paper.Group {
     }
 
     doubleClickHandler(e) {
-        ReactDOM.unmountComponentAtNode(editorElm);
-        ReactDOM.render(<DeviceEditor device={this} />, editorElm);
-        woopra.track("device_edited", { type: this.type });
+       Actions.showEditorForDevice(this);
     }
 
-    clickHandler(e) {}
+    clickHandler() {
+        console.log(this);
+        this.select();
+    }
+    
     mouseEnterHandler(e) {
         if (!diagram.isMouseDown) {
             diagram.revealDeviceHandles(this);
@@ -122,6 +123,10 @@ export default class Device extends Paper.Group {
                 outlet.flow.render();
             }
         });
+    }
+
+    select(){
+        selection.selectDevice(this);
     }
 
     updateShafts() {

@@ -163,6 +163,9 @@ div.fa.fa-magic {
     margin: 0 0 0 0;
 }
 
+.device-btn:focus {
+    outline: none;
+}
 .device-btn img {
     
     width: 30pt;
@@ -303,4 +306,16 @@ div.fa.fa-magic {
 
     position: absolute;
     right: 10px;
+}
+
+#credits {
+
+    position: fixed;
+    display: block;
+
+    bottom: 65px;
+    right: 8px;
+
+    font-size: 8.5pt;
+    color: #444;
 }

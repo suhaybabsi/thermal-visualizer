@@ -11,3 +11,10 @@ export function showSystemResults() {
         type: "OPEN_RESULTS"
     });
 }
+
+export function showEditorForDevice(device) {
+    dispatcher.dispatch({
+        type: "OPEN_EDITOR",
+        payload: { device }
+    });
+}

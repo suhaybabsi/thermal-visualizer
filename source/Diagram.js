@@ -1,14 +1,12 @@
 import { units } from "./Setup";
 import * as grid from "./Grid";
+import * as Actions from "./Actions";
 import dispatcher from "./Dispatcher";
 import { FlowType, FlowOutlet, FlowDirection, Flow } from "./Flow";
 import { Coupling, Shaft } from "./Shaft";
 import Paper from "paper";
 
 export var selectedUnits = {},
-    isDevicesIconsLoaded = false,
-    isUIElementsLoaded = false,
-    isDocumentFullyLoaded = false,
     listeners = {},
     devices = [],
     flows = [],
@@ -17,13 +15,16 @@ export var selectedUnits = {},
     shaftLayer,
     flowLayer,
     baseLayer,
+    overlayLayer,
     gridLayer;
 
 export function addFlow(flow) {
+
     flows.push(flow);
 }
 
 export function removeFlow(flow) {
+
     flows = flows.filter(dflow => {
         return dflow !== flow;
     });
@@ -70,10 +71,10 @@ export function on(ev, func) {
 
 function handleActions(action) {
 
-    switch(action.type){
+    switch (action.type) {
         case "MODEL_CALCULATED":
-            shafts.map(shaft => shaft.showResults() )
-            flows.map(flow => flow.node.refresh() )
+            shafts.map(shaft => shaft.showResults())
+            flows.map(flow => flow.node.refresh())
             break;
     }
 }
@@ -104,27 +105,52 @@ export function viewCenter() {
     return view.bounds.center;
 }
 
-function loadAllRequiredData() {
+export function getResource(resName) {
+
+    return resourcesStore[resName];
+}
+
+var resourcesStore = {};
+function loadImage(name, url) {
+
+    var raster = new Raster(url);
+    var symbol = new Symbol(raster);
+    raster.remove();
+
+    resourcesStore[name] = symbol;
+    return raster;
+}
+
+export function getImageInstance(resName) {
+
+    var symbol = getResource(resName);
+    var instance = symbol.place();
+    return instance;
+}
+
+
+function loadAllRequiredResources() {
 
     $.when(
-        // loading assets
+
+        loadImage("edit", "img/ic_edit.png"),
+        loadImage("rotate", "img/ic_rotate.png"),
+        loadImage("delete", "img/ic_delete.png"),
+
     ).then(function () {
+
         console.log("Diagram loaded successfully !!");
         executeListenersOfEvent("ready");
-        isDevicesIconsLoaded = true;
-        // tryHideLoadingScreen();
     });
 }
 
-let tool;
+export let tool;
 export function setup() {
 
     Paper.install(window);
     $(document).ready(function () {
 
-        isDocumentFullyLoaded = true;
         Paper.setup('board');
-
         $(window).on("resize", function () {
 
             var cw = $("#board").width();
@@ -139,18 +165,20 @@ export function setup() {
         shaftLayer = new Paper.Layer();
         annotationLayer = new Paper.Layer();
         baseLayer = new Paper.Layer();
+        overlayLayer = new Paper.Layer();
 
         annotationLayer.pivot = new Point(0, 0);
         gridLayer.pivot = new Point(0, 0);
         flowLayer.pivot = new Point(0, 0);
         shaftLayer.pivot = new Point(0, 0);
         baseLayer.pivot = new Point(0, 0);
+        overlayLayer.pivot = new Point(0, 0);
         tool = new Paper.Tool();
 
         baseLayer.activate();
         grid.setup(gridLayer, baseLayer);
 
-        loadAllRequiredData();
+        loadAllRequiredResources();
     });
 }
 
@@ -168,7 +196,7 @@ on("ready", function () {
         }
 
     }).on('keyup', function (e) {
-        
+
         isKeyDown = false;
         if (e.key === 'shift') {
             doDragGrid = false;
@@ -182,6 +210,7 @@ on("ready", function () {
             flowLayer.position = flowLayer.position.add(e.delta);
             shaftLayer.position = shaftLayer.position.add(e.delta);
             gridLayer.position = gridLayer.position.add(e.delta);
+            overlayLayer.position = overlayLayer.position.add(e.delta);
             grid.redraw();
 
             totalGridDelta.x += e.delta.x;
@@ -193,6 +222,7 @@ on("ready", function () {
         if (!currentHandle) {
             hideDeviceHandles();
         }
+
     }).on('mouseup', function (e) {
         isMouseDown = false;
         hideDeviceHandles();
@@ -210,27 +240,12 @@ on("ready", function () {
  * Loading Data and Setting up diagram
  */
 
-/*
-function tryHideLoadingScreen(){
-    
-    var isFullyLoaded = 
-            isUIElementsLoaded &&
-            isDevicesIconsLoaded &&
-            isDocumentFullyLoaded;
-    
-    if(isFullyLoaded){
-        
-        setTimeout(function () {
-            $('#loading-wrapper').addClass('loaded');
-            $('#container').css("visibility", "visible");
-        }, 1000);
-    }
-}*/
-
 export function useHandCursor() {
+
     $('#board').css('cursor', 'pointer');
 }
 export function resetCursor() {
+
     $('#board').css('cursor', 'auto');
 }
 
@@ -429,7 +444,7 @@ export function revealDeviceHandles(device) {
     device.flowOutlets.filter(outlet => {
 
         return outlet.direction == FlowDirection.OUT
-            //&& outlet.isConnected() === false;
+        //&& outlet.isConnected() === false;
     }).map(outlet => {
 
         deviceHandles.push(new OutletHandle(outlet));
@@ -547,7 +562,7 @@ function isShaftConnectedToPoint(dvc, c_cpl) {
     var c_shafts = shafts.filter(sh => {
         return sh.couplings.indexOf(c_cpl) > -1;
     });
-    
+
     for (var i = 0; i < dvc.shaftCouplings.length; i++) {
 
         var d_cpl = dvc.shaftCouplings[i];
@@ -562,38 +577,72 @@ function isShaftConnectedToPoint(dvc, c_cpl) {
     return false;
 }
 
-export function clear(){
+export function clear() {
 
     hideDeviceHandles();
-    
+
     let _shafts = shafts.splice(0);
     let _flows = flows.splice(0);
     let _devices = devices.splice(0);
 
-    _shafts.map(shaft => shaft.delete() );
-    _flows.map(flow => flow.remove() );
-    _devices.map(dvc => dvc.remove() );
+    _shafts.map(shaft => shaft.delete());
+    _flows.map(flow => flow.remove());
+    _devices.map(dvc => dvc.remove());
 }
 
-export function prepareSystemModel(){
+export function deleteDevice(device) {
+
+    let trashFlows = flows.filter(flow => {
+        let sp = flow.srcOutlet;
+        let ep = flow.destOutlet;
+        return sp.device === device || ep.device === device;
+    });
+
+    trashFlows.map(flow => flow.remove());
+
+    let trashCouplings = shafts.map(shaft => {
+        return shaft.couplings.filter(cpl => {
+            return cpl.device === device;
+        })[0];
+    });
+
+    trashCouplings.map(cpl => {
+
+        if(cpl){
+            let shaft = cpl.shaft;
+            shaft.removeCoupling(cpl);
+        }
+    });
+
+    devices = devices.filter(dvc => {
+        return dvc !== device;
+    });
+
+    device.remove();
+    device.flowOutlets.map(op => op.clear());
+    device.flowOutlets = null;
+    device.removeChildren();
+}
+
+export function prepareSystemModel() {
 
     let model = {};
-    model.devices = devices.map( device => {
+    model.devices = devices.map(device => {
 
         let d_model = device.model;
         let props;
-        for(var prop in d_model){
+        for (var prop in d_model) {
             let pval = d_model[prop];
-            if(pval != null){
+            if (pval != null) {
                 props = props || {};
                 props[prop] = pval;
             }
         }
 
-        return {type: device.type, props};
+        return { type: device.type, props };
     });
 
-    model.flows = flows.map( flow => {
+    model.flows = flows.map(flow => {
 
         let src_op = flow.srcOutlet;
         let dest_op = flow.destOutlet;
@@ -607,23 +656,25 @@ export function prepareSystemModel(){
         let src_op_index = src_dvc.flowOutlets.indexOf(src_op);
         let dest_op_index = dest_dvc.flowOutlets.indexOf(dest_op);
         let type = (src_op.type == FlowType.Stream) ? "stream" : "pipe";
-        
-        return {type,
-                from:{ d: src_d_index , o: src_op_index  }, 
-                to:  { d: dest_d_index, o: dest_op_index } };
+
+        return {
+            type,
+            from: { d: src_d_index, o: src_op_index },
+            to: { d: dest_d_index, o: dest_op_index }
+        };
     });
 
-    model.shafts = shafts.map( shaft => {
+    model.shafts = shafts.map(shaft => {
 
-        return shaft.couplings.map( cpl => {
+        return shaft.couplings.map(cpl => {
 
             let dvc = cpl.device;
             let d_index = devices.indexOf(dvc);
-            let c_index = dvc.shaftCouplings.indexOf(cpl); 
+            let c_index = dvc.shaftCouplings.indexOf(cpl);
 
-            return {d: d_index, c: c_index};
+            return { d: d_index, c: c_index };
         });
     });
-    
+
     return model;
 }

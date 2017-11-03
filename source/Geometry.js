@@ -24,11 +24,13 @@ export function nearestCornerToPoint(rect, p){
 
     let points = [
         rect.topLeft,
+        rect.topRight,
         rect.bottomLeft,
         rect.bottomRight,
         rect.topCenter,
         rect.bottomCenter,
-        rect.leftCenter
+        rect.leftCenter,
+        rect.rightCenter
     ];
 
     let tp = points[0];

@@ -158,6 +158,11 @@ export class Flow {
         this.pathDrawer = PathDrawers[0];
         this.number = 0;
         this.isSelected = false;
+        this.model = (to.type == FlowType.Pipe) ? {
+            pl: 0.0,
+            hl: 0.0,
+            m: null
+        } : null;
         
         if (from.direction != FlowDirection.OUT ||
             to.direction != FlowDirection.IN) {
@@ -171,6 +176,9 @@ export class Flow {
         this.destOutlet.connect(this);
         this.childrens = [];
         this.node = new ThermalNode(this);
+        this.node2 = (to.type == FlowType.Pipe)
+            ? new ThermalNode(this, ThermalLabelLocation.End) 
+            : null;
 
         this.label = new PointText();
         this.label.fontSize = 11;
@@ -183,6 +191,10 @@ export class Flow {
     setIndex(i) {
         this.number = i;
         this.render();
+    }
+
+    getType(){
+        return this.srcOutlet.type;
     }
 
     isContinued() {
@@ -211,6 +223,8 @@ export class Flow {
         this.childrens.map(child => child.remove());
         this.childrens = null;
         this.node.remove();
+        if(this.node2) { this.node2.remove() }
+
         this.label.remove();
         this.srcOutlet.disconnect();
         this.destOutlet.disconnect();
@@ -245,8 +259,37 @@ export class Flow {
         return this;
     }
 
+    displaceNode2Label(dx, dy) {
+        this.node2.labelDisplacement = new Point(dx, dy);
+        this.node2.update();
+        return this;
+    }
+
+    displayNode1Props(props){
+
+        for(var p in this.node.label.fields){
+
+            let field = this.node.label.fields[p];
+            field.visible = (props.indexOf(p) > -1);
+        }
+
+        this.refreshNodes();
+    }
+
+    displayNode2Props(props){
+        
+        for(var p in this.node2.label.fields){
+            
+            let field = this.node2.label.fields[p];
+            field.visible = (props.indexOf(p) > -1);
+        }
+        
+        this.refreshNodes();
+    }
+
     refreshNodes() {
         this.node.refresh();
+        if(this.node2) { this.node2.refresh() }
     }
 
     render() {
@@ -277,6 +320,14 @@ export class Flow {
         this.node.firstChild.fillColor = color;
         this.node.position = p1.add(pnn);
         this.node.update();
+
+        if(this.node2){
+
+            let pnn2 = pe.subtract(p2).normalize().multiply(20);
+            this.node2.firstChild.fillColor = color;
+            this.node2.position = p2.add(pnn2);
+            this.node2.update();
+        }
 
         this.label.content = (this.number > 0) ? this.number : "";
         this.label.position = p1.add(pnn).add(pnn.rotate(-90));
@@ -342,10 +393,10 @@ export class Flow {
 
 class ThermalNode extends Paper.Group {
 
-    constructor(flow) {
+    constructor(flow, loc = ThermalLabelLocation.Start) {
         super();
         this.flow = flow;
-        this.label = new ThermalLabel(this);
+        this.label = new ThermalLabel(this, loc);
         this.labelDisplacement = new Point(0, 0);
 
         let circle = new Paper.Path.Circle(new Point(0, 0), 5);
@@ -373,12 +424,17 @@ class ThermalNode extends Paper.Group {
     }
 }
 
+let ThermalLabelLocation = {
+    Start: 0,
+    End: 1
+}
 
 class ThermalLabel extends Paper.Group {
 
-    constructor(node) {
+    constructor(node, loc = ThermalLabelLocation.Start) {
         super();
         this.node = node;
+        this.location = loc;
 
         this.fields = { 
             t: {label: "T", visible: true}, 
@@ -407,7 +463,7 @@ class ThermalLabel extends Paper.Group {
         let dp = this.node.labelDisplacement;
         this.node.labelDisplacement = dp.add(e.delta);
         this.drawLine();
-        //console.log(this.node.labelDisplacement);
+        console.log(this.node.labelDisplacement);
     }
 
     remove() {
@@ -433,9 +489,15 @@ class ThermalLabel extends Paper.Group {
     update(flow) {
 
         let res = flow.results;
-        res = (res) ? res : {};
+        if(res && flow.getType() == FlowType.Pipe){
+            res = (this.location == ThermalLabelLocation.Start)
+                ? res.inlet
+                : res.outlet;
+        }
 
+        res = (res) ? res : {};
         let ty = 0;
+
         for (var prop in this.fields) {
 
             let field = this.fields[prop];

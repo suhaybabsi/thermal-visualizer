@@ -82,7 +82,7 @@ function handleActions(action) {
     switch (action.type) {
         case "MODEL_CALCULATED":
             shafts.map(shaft => shaft.showResults())
-            flows.map(flow => flow.node.refresh())
+            flows.map(flow => flow.refreshNodes())
             break;
     }
 }
@@ -683,11 +683,13 @@ export function prepareSystemModel() {
         let src_op_index = src_dvc.flowOutlets.indexOf(src_op);
         let dest_op_index = dest_dvc.flowOutlets.indexOf(dest_op);
         let type = (src_op.type == FlowType.Stream) ? "stream" : "pipe";
+        let props =flow.model;
 
         return {
             type,
             from: { d: src_d_index, o: src_op_index },
-            to: { d: dest_d_index, o: dest_op_index }
+            to: { d: dest_d_index, o: dest_op_index },
+            props
         };
     });
 
@@ -717,6 +719,10 @@ export function updateFlowPaths() {
 
         return dvc.flowOutlets.length > 0 && connectedInlets.length == 0;
     });
+
+    if(initialDevices.length == 0){
+        initialDevices.push(devices[0]);
+    }
 
     var flowsPath = [];
     initialDevices.map(dvc => {

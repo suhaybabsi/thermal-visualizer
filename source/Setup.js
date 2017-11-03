@@ -1,3 +1,4 @@
+import Paper from "paper";
 import * as drawing from "./Drawing";
 import { FlowDirection, FlowType, FlowOutlet } from "./Flow";
 import { Coupling, ShaftOrientation } from "./Shaft";
@@ -414,7 +415,7 @@ export let deviceConfigurations = {
     condenser: {
         name: "Condenser",
         abbrev: "CD",
-        build: drawing.circle("#3245ed", 20),
+        build: drawing.circle(new Paper.Color(0.2, 0.2, 0.5), 20),
         fields: [
             new Field("he", "Heat Extracted", null, FieldType.UNIT_COMBO, units.w),
             new Field("pl", "Pressure Loss", 0.03, FieldType.UNIT, percentUnit),

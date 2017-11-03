@@ -4,6 +4,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import RC2 from "react-chartjs2";
 import * as diagram from "../Diagram";
 import { units } from "../Setup";
+import { FlowType } from "../Flow";
 import ComboBox from "./components/ComboBox";
 import dispatcher from "../Dispatcher";
 
@@ -86,8 +87,14 @@ export default class ResultsPanel extends React.Component {
         }).map( flow => {
 
             let res = flow.results;
+            if(flow.getType() == FlowType.Pipe){
+                res = res.inlet;
+            }
+
             if( res && res[item.prop] ){
-                dataList.push({x: flow.number, y: res[item.prop]});
+
+                let val = Number(chartUnit.print(res[item.prop]));
+                dataList.push({x: flow.number, y:val });
             }
         });
 

@@ -180,6 +180,49 @@ function buildMultiShaftFlowDistributed() {
     shaft2.addCoupling(load2.shaftCouplings[0]);
 }
 
+
+function buildSteamCycleSimple() {
+    
+    let pump = new Device("pump");
+    let boiler = new Device("boiler");
+    let turbine = new Device("steam_turbine");
+    let condenser = new Device("condenser");
+    let load = new Device("generator");
+    pump.turn(2);
+    boiler.turn(2);
+
+    pump.position = new Point(370, 440);
+    boiler.position = new Point(200, 275);
+    turbine.position = new Point(420, 165);
+    condenser.position = new Point(550, 320);
+    load.position = new Point(620, 175);
+
+    new Flow(pump.flowOutlets[1], boiler.flowOutlets[0])
+        .displaceNode1Label(-80, -30)
+        .displaceNode2Label(-80, 20)
+        .displayNode1Props(["p", "m"]);
+
+    new Flow(boiler.flowOutlets[1], turbine.flowOutlets[0])
+        .flip()
+        .displaceNode1Label(12, -30)
+        .displaceNode2Label(-80, -30);
+
+    new Flow(turbine.flowOutlets[1], condenser.flowOutlets[0])
+        .flip().flip().flip()
+        .displaceNode1Label(-80, 20)
+        .displaceNode2Label(10, -30);
+
+    new Flow(condenser.flowOutlets[1], pump.flowOutlets[0])
+        .flip()
+        .displaceNode1Label(10, 20)
+        .displaceNode2Label(5, 20);
+
+    let shaft = new Shaft();
+    shaft.addCoupling(turbine.shaftCouplings[0]);
+    shaft.addCoupling(load.shaftCouplings[0]);
+}
+    
+
 function buildConfiguration(index) {
 
     switch (index) {
@@ -197,6 +240,9 @@ function buildConfiguration(index) {
             break;
         case 4:
             buildMultiShaftFlowDistributed();
+            break;
+        case 5:
+            buildSteamCycleSimple();
             break;
     }
 }

@@ -10,7 +10,7 @@ export default class FlowEditor extends React.Component {
         this.setState({ flow: this.props.flow })
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         this.state.flow.unselect();
     }
 
@@ -23,11 +23,11 @@ export default class FlowEditor extends React.Component {
         this.state.flow.refreshNodes();
     }
 
-    pathButtonClicked(e){
+    pathButtonClicked(e) {
 
         let node = ReactDOM.findDOMNode(this);
         let index = $(".btn-group .btn", node).index(e.target);
-        
+
         this.state.flow.setPathIndex(index);
         this.forceUpdate();
     }
@@ -44,11 +44,34 @@ export default class FlowEditor extends React.Component {
             { name: "Specific Exergy", ref: fields.x },
         ]
 
-        let elmsList = elements.map( (element, i) => {
-            return <FlowField key={i} 
-                        element={element} 
-                        onChange={this.fieldChangeHandler.bind(this)} />
+        let elmsList = elements.map((element, i) => {
+            return <FlowField key={i}
+                element={element}
+                onChange={this.fieldChangeHandler.bind(this)} />
         });
+
+        let node2Label, elmsList2, newLine, startLabel;
+        if (this.state.flow.node2) {
+            let fields2 = this.state.flow.node.label.fields;
+            let elements2 = [
+                { name: "Temperature", ref: fields2.t },
+                { name: "Pressure", ref: fields2.p },
+                { name: "Mass Rate", ref: fields2.m },
+                { name: "Specific Energy", ref: fields2.h },
+                { name: "Specific Entropy", ref: fields2.s },
+                { name: "Specific Exergy", ref: fields2.x },
+            ]
+
+            elmsList2 = elements2.map((element, i) => {
+                return <FlowField key={i}
+                    element={element}
+                    onChange={this.fieldChangeHandler.bind(this)} />
+            });
+
+            startLabel = "Start - ";
+            node2Label = <label>End - Properties</label>;
+            newLine = <br/>
+        }
 
         let number = (this.state.flow.number > 0)
             ? "(" + this.state.flow.number + ")" : "";
@@ -61,7 +84,7 @@ export default class FlowEditor extends React.Component {
         ];
 
         pathButtonsClasses[this.state.flow.pathIndex] += " active";
-        let noEventsCss = {pointerEvents: "none"};
+        let noEventsCss = { pointerEvents: "none" };
 
         return (
             <ReactCSSTransitionGroup
@@ -84,8 +107,12 @@ export default class FlowEditor extends React.Component {
                             <button type="button" class={pathButtonsClasses[2]} onClick={this.pathButtonClicked.bind(this)} ><img style={noEventsCss} src="img/fl_vertical.png" /></button>
                             <button type="button" class={pathButtonsClasses[3]} onClick={this.pathButtonClicked.bind(this)} ><img style={noEventsCss} src="img/fl_horizontal.png" /></button>
                         </div><br /><br />
-                        <label>Properties</label><br />
+                        <label>{startLabel}Properties</label><br />
                         {elmsList}
+                        {newLine}
+                        {node2Label}
+                        {newLine}
+                        {elmsList2}
                     </div>
                 </div>
             </ReactCSSTransitionGroup>
@@ -95,12 +122,12 @@ export default class FlowEditor extends React.Component {
 
 class FlowField extends React.Component {
 
-    componentWillMount(){
+    componentWillMount() {
 
-        this.setState({element: this.props.element});
+        this.setState({ element: this.props.element });
     }
 
-    checkboxChanged(){
+    checkboxChanged() {
 
         let val = this.state.element.ref.visible;
         this.state.element.ref.visible = !val;

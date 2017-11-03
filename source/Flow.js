@@ -261,7 +261,7 @@ export class Flow {
         this.node.update();
 
         this.label.content = (this.number > 0) ? this.number : "";
-        this.label.position = p1.add(pnn).add(pnn.rotate(90));
+        this.label.position = p1.add(pnn).add(pnn.rotate(-90));
         
         let arrow = drawing.createArrowHead(pe, p2, color);
         arrow.locked = true;

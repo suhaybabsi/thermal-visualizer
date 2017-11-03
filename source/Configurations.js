@@ -154,7 +154,6 @@ function buildMultiShaftFlowDistributed() {
     burner.position = new Point(420, 120);
     turbine.position = new Point(550, 200);
     exhaust.position = new Point(700, 75);
-    load.position = new Point(710, 200);
 
     burner2.position = new Point(420, 350);
     turbine2.position = new Point(550, 430);
@@ -176,7 +175,6 @@ function buildMultiShaftFlowDistributed() {
     let shaft = new Shaft();
     shaft.addCoupling(compressor.shaftCouplings[0]);
     shaft.addCoupling(turbine.shaftCouplings[0]);
-    shaft.addCoupling(load.shaftCouplings[0]);
 
     let shaft2 = new Shaft();
     shaft2.addCoupling(turbine2.shaftCouplings[0]);

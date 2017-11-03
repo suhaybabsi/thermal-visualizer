@@ -81,11 +81,13 @@ export default class ResultsPanel extends React.Component {
         chartOptions.title.text = item.name + " [" + item.unit.label+"]";
 
         var dataList = [];
-        diagram.flows.map( (flow, i) => {
+        diagram.flows.slice().sort((a, b) => {
+            return a.number > b.number;
+        }).map( flow => {
 
             let res = flow.results;
             if( res && res[item.prop] ){
-                dataList.push({x: i+1, y: res[item.prop]});
+                dataList.push({x: flow.number, y: res[item.prop]});
             }
         });
 

@@ -150,9 +150,11 @@ let PathDrawers = [
 export class Flow {
 
     constructor(from, to) {
+        
         this.srcOutlet = from;
         this.destOutlet = to;
         this.pathDrawer = PathDrawers[0];
+        this.number = 0;
 
         if (from.direction != FlowDirection.OUT ||
             to.direction != FlowDirection.IN) {
@@ -167,8 +169,37 @@ export class Flow {
         this.childrens = [];
         this.node = new ThermalNode(this);
 
+        this.label = new PointText();
+        this.label.fontSize = 11;
+        this.label.fillColor = "#999";
+
         this.render();
         diagram.addFlow(this);
+    }
+
+    setIndex(i){
+        this.number = i;
+        this.render();
+    }
+
+    isContinued(){
+
+        let dvc = this.destOutlet.device;
+        return dvc.flowOutlets.filter(op => {
+            return op.direction == FlowDirection.OUT && op.isConnected();
+        }).length > 0;
+    }
+
+    getContinuedFlows(exclude){
+
+        let dvc = this.destOutlet.device;
+        let contOps = dvc.flowOutlets.filter(op => {
+            return op.direction == FlowDirection.OUT && op.isConnected();
+        }).filter(op => {
+            return (exclude) ? exclude.indexOf(op.flow) == -1 : true;
+        }).map(op => { return op.flow; });
+
+        return contOps;
     }
 
     remove() {
@@ -176,6 +207,7 @@ export class Flow {
         this.childrens.map(child => child.remove());
         this.childrens = null;
         this.node.remove();
+        this.label.remove();
         this.srcOutlet.disconnect();
         this.destOutlet.disconnect();
         this.srcOutlet = null;
@@ -228,6 +260,9 @@ export class Flow {
         this.node.position = p1.add(pnn);
         this.node.update();
 
+        this.label.content = (this.number > 0) ? this.number : "";
+        this.label.position = p1.add(pnn).add(pnn.rotate(90));
+        
         let arrow = drawing.createArrowHead(pe, p2, color);
         arrow.locked = true;
 
@@ -325,6 +360,7 @@ class ThermalLabel extends Paper.Group {
         let dp = this.node.labelDisplacement;
         this.node.labelDisplacement = dp.add(e.delta);
         this.drawLine();
+        console.log(this.node.labelDisplacement );
     }
 
     remove(){

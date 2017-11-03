@@ -105,29 +105,33 @@ class DeviceControls extends Paper.Group {
 }
 
 var controls;
-diagram.on("ready", function () {
+function insureControls(){
+    
+    if(controls == null){
 
-    controls = new DeviceControls();
-    controls.dismiss();
-
-    project.view.on("mousedown", function (e) {
-
-        if (controls.isShown) {
-
-            if(!controls.contains(e.point) 
-            && !controls.currentDevice.contains(e.point)) {
-
-                controls.dismiss();
-                removeSelection();
+        controls = new DeviceControls();
+        controls.dismiss();
+    
+        project.view.on("mousedown", function (e) {
+    
+            if (controls.isShown) {
+    
+                if(!controls.contains(e.point) 
+                && !controls.currentDevice.contains(e.point)) {
+    
+                    controls.dismiss();
+                    removeSelection();
+                }
             }
-        }
-    });
-});
+        });
+    }
+}
 
 var selectionShape;
 var selectedDevice;
 export function selectDevice(device) {
 
+    insureControls();
     controls.presentForDevice(device);
     selectedDevice = device;
     drawSelectionBorder(device);

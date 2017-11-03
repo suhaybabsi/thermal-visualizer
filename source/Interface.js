@@ -86,6 +86,7 @@ $(window).resize(function () {
 function calculateModel() {
 
     $("#spinner").fadeIn()
+    diagram.updateFlowPaths();
 
     let model = diagram.prepareSystemModel();
     console.log(model);

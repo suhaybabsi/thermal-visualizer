@@ -64,6 +64,7 @@ export class Shaft {
         this.orientation = cpl.orientation;
         this.couplings.push(cpl);
         cpl.shaft = this;
+        this.render(cpl.device);
     }
 
     getDeviceCoupling(device) {

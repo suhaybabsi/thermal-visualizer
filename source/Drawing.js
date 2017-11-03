@@ -56,6 +56,22 @@ export function circle(color, radius) {
     }
 }
 
+export function outlineCircle(color, width, radius) {
+
+    let r = (radius) ? radius : 25;
+
+    return () => {
+
+        let crcle = new Paper.Path.Circle(new Point(r, r), r)
+        crcle.fillColor = new Color(0, 0, 0, 0.01);
+        crcle.strokeColor = color;
+        crcle.strokeWidth = width;
+        crcle.pivot = new Point(0, 0);
+
+        return crcle;
+    }
+}
+
 export function rectangle(color, w, h) {
 
     let wt = (w) ? w : 60;

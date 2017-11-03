@@ -4,6 +4,7 @@ import * as Actions from "./Actions";
 import dispatcher from "./Dispatcher";
 import { FlowType, FlowOutlet, FlowDirection, Flow } from "./Flow";
 import { Coupling, Shaft } from "./Shaft";
+import CrossPoint from "./CrossPoint";
 import Paper from "paper";
 
 export var selectedUnits = {},
@@ -18,8 +19,11 @@ export var selectedUnits = {},
     overlayLayer,
     gridLayer;
 
+export function addDevice(device) {
+    baseLayer.addChild(device);
+    devices.push(device);
+}
 export function addFlow(flow) {
-
     flows.push(flow);
 }
 
@@ -337,7 +341,21 @@ class InletHandle extends FlowPointHandle {
     mouseupHandler(e) {
 
         let { outlet } = currentHandle;
-        let flow = new Flow(outlet, this.outlet);
+
+        let srcOutlet = outlet;
+        if (outlet.isConnected()) {
+
+            let pflow = outlet.flow;
+            let cross = new CrossPoint(outlet.type);
+            cross.position = outlet.location().add(new Point(30, 30));
+            pflow.srcOutlet = cross.flowOutlets[1];
+            pflow.srcOutlet.connect(pflow);
+
+            new Flow(outlet, cross.flowOutlets[0]);
+            srcOutlet = cross.flowOutlets[2];
+        }
+
+        new Flow(srcOutlet, this.outlet);
         update();
     }
 }
@@ -608,7 +626,7 @@ export function deleteDevice(device) {
 
     trashCouplings.map(cpl => {
 
-        if(cpl){
+        if (cpl) {
             let shaft = cpl.shaft;
             shaft.removeCoupling(cpl);
         }
@@ -677,4 +695,65 @@ export function prepareSystemModel() {
     });
 
     return model;
+}
+
+
+export function updateFlowPaths() {
+
+    let initialDevices = devices.filter(dvc => {
+
+        let connectedInlets = dvc.flowOutlets.filter(op => {
+            return op.direction == FlowDirection.IN && op.isConnected();
+        });
+
+        return dvc.flowOutlets.length > 0 && connectedInlets.length == 0;
+    });
+
+    var flowsPath = [];
+    initialDevices.map(dvc => {
+
+        let outletFlows = dvc.flowOutlets
+            .filter(op => op.isConnected() && op.direction == FlowDirection.OUT)
+            .map(op => { return op.flow; });
+
+        let restFlows = [];
+        let recognizePath = function (flow) {
+
+            flowsPath.push(flow);
+
+            var cflow = flow;
+            while (cflow.isContinued()) {
+
+                let _flows = cflow.getContinuedFlows(flowsPath);
+                if (_flows.length > 0) {
+
+                    cflow = _flows[0];
+                    flowsPath.push(cflow);
+                    _flows.splice(1).map(fl => restFlows.push(fl));
+
+                } else {
+
+                    break;
+                }
+            }
+
+            restFlows = restFlows.filter(flow => {
+                return flowsPath.indexOf(flow) == -1;
+            });
+        }
+
+        outletFlows.map(flow => {
+            recognizePath(flow);
+        });
+
+        while (restFlows.length > 0) {
+            let flow = restFlows[0];
+            restFlows.splice(0);
+            recognizePath(flow);
+        }
+    });
+
+    flowsPath.map((flow, i) => {
+        flow.setIndex(i + 1);
+    });
 }

@@ -154,7 +154,7 @@ export class Field {
     }
 }
 
-class OutletConfig {
+export class OutletConfig {
 
     constructor(type, direction, dx, dy){
         this.type = type;

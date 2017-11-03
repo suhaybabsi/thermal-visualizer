@@ -6,15 +6,15 @@ import * as diagram from "./Diagram";
 import { FlowType, FlowOutlet, FlowDirection } from "./Flow";
 import { ShaftOrientation } from "./Shaft";
 import * as selection from "./Selection";
+import * as drawing from "./Drawing";
 import * as Actions from "./Actions";
 
 export default class Device extends Paper.Group {
 
-    constructor(type, model) {
-        diagram.baseLayer.activate();
+    constructor(type, model, _config) {
         super();
 
-        let config = deviceConfigurations[type];
+        let config = (_config) ? _config : deviceConfigurations[type];
         if (!model) {
             model = {};
             config.fields.map(field => {
@@ -50,7 +50,7 @@ export default class Device extends Paper.Group {
         this.on("mousedrag", this.dragHandler);
         this.on("doubleclick", this.doubleClickHandler);
         this.on("click", this.clickHandler);
-        diagram.devices.push(this);
+        diagram.addDevice(this);
     }
 
     getShaftEnter(cpl) {

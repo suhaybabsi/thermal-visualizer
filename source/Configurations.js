@@ -141,7 +141,6 @@ function buildMultiShaftFlowDistributed() {
     let burner = new Device("burner");
     let turbine = new Device("gas_turbine");
     let exhaust = new Device("exhaust");
-    let load = new Device("generator");
 
     let burner2 = new Device("burner");
     let turbine2 = new Device("gas_turbine");

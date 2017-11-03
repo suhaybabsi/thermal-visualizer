@@ -20,9 +20,12 @@ export default class ComboBox extends React.Component {
                 itemSelected={this.itemSelected.bind(this)} />
         });
 
+        let _class = "btn btn-default dropdown-toggle"
+        _class = this.props.isSmall ? _class + " btn-xs" : _class;
+
         return (
             <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle"
+                <button class={ _class }
                     type="button"
                     data-toggle="dropdown"
                     aria-haspopup="true"

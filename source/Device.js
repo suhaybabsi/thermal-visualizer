@@ -96,7 +96,7 @@ export default class Device extends Paper.Group {
     }
 
     clickHandler() {
-        console.log(this);
+        
         this.select();
     }
     
@@ -113,7 +113,7 @@ export default class Device extends Paper.Group {
             this.position = newPoint;
             this.updateFlows();
             this.updateShafts();
-            console.log(newPoint);
+            //console.log(newPoint);
         }
     }
 

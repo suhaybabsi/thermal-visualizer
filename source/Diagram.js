@@ -49,6 +49,8 @@ export function defaultUnits() {
     selectedUnits.p = units.p[0];
     selectedUnits.t = units.t[0];
     selectedUnits.w = units.w[0];
+    selectedUnits.h = units.x[0];
+    selectedUnits.s = units.x[0];
     selectedUnits.x = units.x[0];
 }
 
@@ -58,6 +60,8 @@ export function hasDefaultUnits() {
     var pi = units.p.indexOf(selectedUnits.p);
     var ti = units.t.indexOf(selectedUnits.t);
     var wi = units.w.indexOf(selectedUnits.w);
+    var hi = units.x.indexOf(selectedUnits.h);
+    var si = units.x.indexOf(selectedUnits.s);
     var xi = units.x.indexOf(selectedUnits.x);
     return mi === 0 && pi === 0
         && ti === 0 && wi === 0
@@ -98,8 +102,13 @@ function executeListenersOfEvent(e_name, e_data) {
 
 export function update() {
 
-    flows.map((flow, i) => {
+    flows.map(flow  => {
         flow.render();
+        flow.refreshNodes();
+    });
+
+    shafts.map( shaft => {
+        shaft.showResults();
     });
 
     view.update();

@@ -149,7 +149,7 @@ export class Shaft {
     showResults() {
 
         diagram.shaftLayer.activate();
-        var unit = units.w[0];
+        var unit = diagram.selectedUnits.w;
         var options = {
             justification: 'left',
             fontFamily: 'sans-serif',

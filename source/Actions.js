@@ -18,3 +18,10 @@ export function showEditorForDevice(device) {
         payload: { device }
     });
 }
+
+export function showEditorForFlow(flow) {
+    dispatcher.dispatch({
+        type: "OPEN_FLOW_EDITOR",
+        payload: { flow }
+    });
+}

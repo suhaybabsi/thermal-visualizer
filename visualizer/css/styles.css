@@ -8,7 +8,7 @@ body {
     margin-left: 27pt;
 }
 
-div.fa.fa-magic {
+.modal-icon {
     
     position: absolute;
     
@@ -308,6 +308,12 @@ div.fa.fa-magic {
     right: 10px;
 }
 
+#settings-btn {
+
+    position: absolute;
+    right: 50px;    
+}
+
 #credits {
 
     position: fixed;
@@ -319,3 +325,45 @@ div.fa.fa-magic {
     font-size: 8.5pt;
     color: #444;
 }
+
+.setting-field {
+
+    display: block;
+    width: 100%;
+
+    height: 35px;
+}
+
+.setting-field div {
+    display: inline-block;
+}
+
+.setting-field div:first-of-type {
+    
+    width: 130px;
+    text-align: right;
+}
+
+.setting-field div:last-of-type {
+    
+    margin-left: 10px;
+}
+
+#flow-editor {
+    
+    position: fixed;
+    display: block;
+
+    right: 5pt;
+    bottom: 50px;
+
+    width: 220pt;
+    height: 200pt;
+
+    background: floralwhite;
+    border: 1pt solid lightgray;
+
+    box-shadow: 0 3pt 3pt grey;
+    z-index: 50;
+}
+    

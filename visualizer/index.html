@@ -20,7 +20,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h4 class="modal-title" id="config-dialog-title">Configurations</h4>
-                    <div class="fa fa-magic"></div>
+                    <div class="modal-icon fa fa-magic"></div>
                 </div>
                 <div class="modal-body">
                     <div class="list-group">
@@ -31,6 +31,20 @@
                         <a href="#" class="list-group-item" conf="4">Gas Turbine, Multi-Shaft, Compressed Air Distributed</a>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div id="settings-dialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="settings-dialog-title">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="settings-dialog-title">Diagram Units</h4>
+                    <div class="modal-icon fa fa-object-group"></div>
+                </div>
+                <div class="modal-body"></div>
             </div>
         </div>
     </div>
@@ -77,10 +91,6 @@
                     device="heat_exchanger">
                     <img src="icons/heat_exchanger_icon.svg" />
                 </button>
-                <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Intercooler"
-                    device="intercooler">
-                    <img src="icons/intercooler_icon.svg" />
-                </button>
                 <button type="button" class="btn btn-default device-btn" data-toggle="tooltip" data-placement="bottom" title="Boiler" device="boiler">
                     <img src="icons/boiler_icon.svg" />
                 </button>
@@ -123,33 +133,18 @@
             <i class="fa fa-bolt"></i>&nbsp;Clear</button>
         <button class="btn btn-default" data-toggle="modal" data-target="#config-dialog">
             <i class="fa fa-magic"></i>&nbsp;Load Configuration</button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <button id="calculate-btn" class="btn btn-default">
             <i class="fa fa-calculator"></i>&nbsp;Calculate</button>
         <button id="results-btn" class="btn btn-default">
             <i class="fa fa-line-chart"></i>&nbsp;&nbsp;Results</button>
 
-        <button id="code-btn" 
-                data-toggle="tooltip" 
-                data-placement="top" 
-                title="Source Code Repository"
-                class="btn btn-default">
+        <button id="code-btn" data-toggle="tooltip" data-placement="top" title="Source Code Repository" class="btn btn-default">
             <i class="fa fa-github"></i>
         </button>
-        <!--
-        <span style="display: inline-block;width: 10px;"></span>
-        <span>Views&nbsp;</span>
-        <div class="view-edit">
-            <div id="views-combo" class="btn-group dropup">
-                <button type="button" class="btn btn-default">Base View</button>
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                <ul class="dropdown-menu"></ul>
-            </div>
-        </div>
-        <a id="edit-views-btn" href="#" class="btn btn-default" role="button"><i class="fa fa-pencil-square-o"></i>&nbsp;&nbsp;Edit</a> -->
+        <button id="settings-btn" data-toggle="modal" data-target="#settings-dialog" data-placement="top" class="btn btn-default">
+            <i class="fa fa-object-group"></i>
+        </button>
     </div>
     <div id="spinner">
         <div class="sk-cube-grid">
@@ -165,7 +160,8 @@
         </div>
     </div>
     <div id="credits">
-        Created by <a href="mailto:suhayb.absi@gmail.com">Suhayb Al-Absi</a>
+        Created by
+        <a href="mailto:suhayb.absi@gmail.com">Suhayb Al-Absi</a>
     </div>
     <!-- Start of Woopra Code - Please change to suit your domain -->
     <script>

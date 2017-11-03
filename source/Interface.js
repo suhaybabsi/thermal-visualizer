@@ -45,22 +45,20 @@ $("#left-btn").click(function () {
 $("#right-btn").click(function () {
 
     let scroll = $(".devices-btns-container").scrollLeft();
-    
+
     $(".devices-btns-container").finish();
     $(".devices-btns-container").animate({
         scrollLeft: scroll + 50
     }, 200);
 });
 
-$("#code-btn").click(function(){
-    window.open("https://github.com/suhaybabsi/thermal-visualizer",'_blank');
+$("#code-btn").click(function () {
+    window.open("https://github.com/suhaybabsi/thermal-visualizer", '_blank');
 });
 
 function validateDevicesNav() {
 
     let width = $(".devices-btns-container").width();
-
-    console.log(width);
 
     if (width < 860) {
 

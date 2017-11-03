@@ -13,7 +13,7 @@ diagram.setup();
 diagram.on("ready", function(){
     
     console.log("Hello there, Visualizer is ready :)");
-    buildConfiguration(4);
+    buildConfiguration(3);
 });
 
 $(".modal-body .list-group .list-group-item").click(function(){

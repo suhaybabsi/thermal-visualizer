@@ -163,7 +163,7 @@ function buildMultiShaftFlowDistributed() {
 
     new Flow(intake.flowOutlets[0], compressor.flowOutlets[0]).displaceNode1Label(16, -31);
     new Flow(compressor.flowOutlets[1], crossPoint.flowOutlets[0]).displaceNode1Label(11, -40);
-    new Flow(crossPoint.flowOutlets[1], burner.flowOutlets[0]).flip().flip().displaceNode1Label(26, -36);
+    new Flow(crossPoint.flowOutlets[1], burner.flowOutlets[0]).flip().flip().displaceNode1Label(26, -30);
     new Flow(burner.flowOutlets[1], turbine.flowOutlets[0]).displaceNode1Label(8, -29);
     new Flow(turbine.flowOutlets[1], exhaust.flowOutlets[0]).flip().displaceNode1Label(10, -35);
     

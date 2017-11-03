@@ -154,9 +154,11 @@ export class Flow {
 
         this.srcOutlet = from;
         this.destOutlet = to;
+        this.pathIndex = 0;
         this.pathDrawer = PathDrawers[0];
         this.number = 0;
-
+        this.isSelected = false;
+        
         if (from.direction != FlowDirection.OUT ||
             to.direction != FlowDirection.IN) {
             throw "Can't create flow from those outlets.";
@@ -204,7 +206,8 @@ export class Flow {
     }
 
     remove() {
-        if (this.border) { this.border.remove(); }
+
+        this.unselect();
         this.childrens.map(child => child.remove());
         this.childrens = null;
         this.node.remove();
@@ -218,12 +221,22 @@ export class Flow {
 
     flip() {
 
-        let index = PathDrawers.indexOf(this.pathDrawer);
-        index = ((index + 1) < PathDrawers.length) ? index + 1 : 0;
+        let index = (this.pathIndex + 1 < PathDrawers.length) 
+            ? this.pathIndex + 1 : 0;
+
+        this.setPathIndex(index);
+        return this;
+    }
+
+    setPathIndex(index){
         this.pathDrawer = PathDrawers[index];
+        this.pathIndex = index;
         this.render();
 
-        return this;
+        if(this.isSelected){
+            this.unselect();
+            this.select();
+        }
     }
 
     displaceNode1Label(dx, dy) {
@@ -290,20 +303,40 @@ export class Flow {
         });
 
         bPath.on("click", function (e) {
-            this.flow.flip();
+            this.flow.select();
+            Actions.showEditorForFlow(this.flow);
         });
-
-        bPath.on("doubleclick", function () {
-            //Actions.showEditorForFlow(this.flow);
-        });
-
 
         this.pathDrawer(bPath, p1, p2);
         bPath.sendToBack();
 
         this.childrens.push(path, arrow, bPath);
-
         diagram.baseLayer.activate();
+    }
+
+    select() {
+
+        this.unselect();
+
+        let p1 = this.srcOutlet.location();
+        let p2 = this.destOutlet.location();
+
+        let bPath = new Path();
+        bPath.strokeColor = new Color(1, 0, 0, 0.1);
+        bPath.strokeWidth = 10.0;
+        bPath.sendToBack();
+
+        this.pathDrawer(bPath, p1, p2);
+        this.border = bPath;
+        this.isSelected = true;
+    }
+
+    unselect() {
+        if (this.border) { 
+            this.border.remove(); 
+            this.border = null;
+            this.isSelected = false
+        }
     }
 }
 
@@ -347,22 +380,24 @@ class ThermalLabel extends Paper.Group {
         super();
         this.node = node;
 
-        var temp = new Paper.PointText();
-        temp.fontSize = 12;
-        temp.fillColor = "red";
-        temp.point = new Point(0, 0);
+        this.fields = { 
+            t: {label: "T", visible: true}, 
+            p: {label: "P", visible: true}, 
+            m: {label: "ṁ", visible: false}, 
+            h: {label: "h", visible: false}, 
+            s: {label: "s", visible: false}, 
+            x: {label: "x", visible: false} 
+        };
 
-        var press = new Paper.PointText();
-        press.fontSize = 12;
-        press.fillColor = "red";
-        press.point = new Point(0, 20);
-
-        this.tLabel = temp;
-        this.pLabel = press;
+        this.labels = {};
+        this.labels.t = createThermalField(0);
+        this.labels.p = createThermalField();
+        this.labels.m = createThermalField();
+        this.labels.h = createThermalField();
+        this.labels.s = createThermalField();
+        this.labels.x = createThermalField();
         this.pivot = new Point(0, 0);
 
-        this.addChild(press);
-        this.addChild(temp);
         this.on("mousedrag", this.dragHandler);
     }
 
@@ -400,14 +435,38 @@ class ThermalLabel extends Paper.Group {
         let res = flow.results;
         res = (res) ? res : {};
 
-        let unitT = diagram.selectedUnits.t;
-        let unitP = diagram.selectedUnits.p;
+        let ty = 0;
+        for (var prop in this.fields) {
 
-        let tVal = (res.t) ? unitT.printWithLabel(res.t) : "0.000 " + unitT.label;
-        let pVal = (res.p) ? unitP.printWithLabel(res.p) : "0.000 " + unitP.label;
+            let field = this.fields[prop];
+            let label = this.labels[prop];
 
-        this.tLabel.content = "T: " + tVal;
-        this.pLabel.content = "P: " + pVal;
+            if(field.visible){
+                let unit = diagram.selectedUnits[prop];
+                let val = ( res[prop] ) ? unit.printWithLabel( res[prop] ) : "0.000 " + unit.label;
+
+                label.content = field.label + ": " + val;
+                label.point = this.position.add(new Point(0, ty));
+                this.addChild(label);
+                ty += 20;
+
+            } else {
+
+                label.remove();
+            }
+        }
+
         this.drawLine();
     }
+}
+
+function createThermalField() {
+
+    var field = new Paper.PointText();
+    field.fontSize = 12;
+    field.fillColor = "red";
+    field.point = new Point(0, 0);
+    field.remove();
+
+    return field;
 }

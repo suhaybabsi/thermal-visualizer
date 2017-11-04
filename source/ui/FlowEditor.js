@@ -52,7 +52,7 @@ export default class FlowEditor extends React.Component {
 
         let node2Label, elmsList2, newLine, startLabel;
         if (this.state.flow.node2) {
-            let fields2 = this.state.flow.node.label.fields;
+            let fields2 = this.state.flow.node2.label.fields;
             let elements2 = [
                 { name: "Temperature", ref: fields2.t },
                 { name: "Pressure", ref: fields2.p },

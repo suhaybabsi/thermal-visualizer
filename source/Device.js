@@ -113,7 +113,7 @@ export default class Device extends Paper.Group {
             this.position = newPoint;
             this.updateFlows();
             this.updateShafts();
-            console.log(newPoint);
+            //console.log(newPoint);
         }
     }
 

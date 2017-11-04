@@ -4,6 +4,13 @@ import CrossPoint from "./CrossPoint";
 import { Flow, FlowType } from "./Flow";
 import { Shaft } from "./Shaft";
 
+function showTemperaturePressure(flows){
+    flows.map(flow => { 
+        flow.displayNode1Props(["p", "t"]);
+        flow.displayNode2Props(["p", "t"]);
+    });
+}
+
 function buildSingleShaftSimple() {
 
     let intake = new Device("intake");
@@ -20,10 +27,14 @@ function buildSingleShaftSimple() {
     exhaust.position = new Point(700, 180);
     load.position = new Point(710, 300);
 
-    new Flow(intake.flowOutlets[0], compressor.flowOutlets[0]).displaceNode1Label(16, -31);
-    new Flow(compressor.flowOutlets[1], burner.flowOutlets[0]).flip().displaceNode1Label(11, -30);
-    new Flow(burner.flowOutlets[1], turbine.flowOutlets[0]).displaceNode1Label(8, -29);
-    new Flow(turbine.flowOutlets[1], exhaust.flowOutlets[0]).flip().displaceNode1Label(12, -30);
+    let flows = [
+        new Flow(intake.flowOutlets[0], compressor.flowOutlets[0]).displaceNode1Label(16, -31),
+        new Flow(compressor.flowOutlets[1], burner.flowOutlets[0]).flip().displaceNode1Label(11, -30),
+        new Flow(burner.flowOutlets[1], turbine.flowOutlets[0]).displaceNode1Label(8, -29),
+        new Flow(turbine.flowOutlets[1], exhaust.flowOutlets[0]).flip().displaceNode1Label(12, -30)
+    ];
+
+    showTemperaturePressure(flows);
 
     let shaft = new Shaft();
     shaft.addCoupling(compressor.shaftCouplings[0]);
@@ -47,13 +58,17 @@ function buildMultiShaftNoReheat() {
     turbine1.position = new Point(550, 200);
     turbine2.position = new Point(715, 200);
     exhaust.position = new Point(900, 120);
-    load.position = new Point(870, 200);
+    load.position = new Point(870, 210);
 
-    new Flow(intake.flowOutlets[0], compressor.flowOutlets[0]).displaceNode1Label(16, -31);
-    new Flow(compressor.flowOutlets[1], burner.flowOutlets[0]).flip().displaceNode1Label(11, -19);
-    new Flow(burner.flowOutlets[1], turbine1.flowOutlets[0]).displaceNode1Label(8, -29);
-    new Flow(turbine1.flowOutlets[1], turbine2.flowOutlets[0]).flip().flip().displaceNode1Label(15, -30);
-    new Flow(turbine2.flowOutlets[1], exhaust.flowOutlets[0]).flip().displaceNode1Label(12, -18);
+    let flows = [
+        new Flow(intake.flowOutlets[0], compressor.flowOutlets[0]).displaceNode1Label(16, -31),
+        new Flow(compressor.flowOutlets[1], burner.flowOutlets[0]).flip().displaceNode1Label(11, -19),
+        new Flow(burner.flowOutlets[1], turbine1.flowOutlets[0]).displaceNode1Label(8, -29),
+        new Flow(turbine1.flowOutlets[1], turbine2.flowOutlets[0]).flip().flip().displaceNode1Label(15, -30),
+        new Flow(turbine2.flowOutlets[1], exhaust.flowOutlets[0]).flip().displaceNode1Label(12, -18)
+    ]
+
+    showTemperaturePressure(flows);
 
     let shaft = new Shaft();
     shaft.addCoupling(compressor.shaftCouplings[0]);
@@ -84,12 +99,16 @@ function buildMultiShaftReheat(){
     exhaust.position = new Point(960, 120);
     load.position = new Point(975, 200);
 
-    new Flow(intake.flowOutlets[0], compressor.flowOutlets[0]).displaceNode1Label(16, -31);
-    new Flow(compressor.flowOutlets[1], burner1.flowOutlets[0]).flip().displaceNode1Label(11, -19);
-    new Flow(burner1.flowOutlets[1], turbine1.flowOutlets[0]).displaceNode1Label(8, -29);
-    new Flow(turbine1.flowOutlets[1], burner2.flowOutlets[0]).flip().displaceNode1Label(15, 20);
-    new Flow(burner2.flowOutlets[1], turbine2.flowOutlets[0]).displaceNode1Label(15, -30);
-    new Flow(turbine2.flowOutlets[1], exhaust.flowOutlets[0]).flip().displaceNode1Label(12, -18);
+    let flows = [
+        new Flow(intake.flowOutlets[0], compressor.flowOutlets[0]).displaceNode1Label(16, -31),
+        new Flow(compressor.flowOutlets[1], burner1.flowOutlets[0]).flip().displaceNode1Label(11, -19),
+        new Flow(burner1.flowOutlets[1], turbine1.flowOutlets[0]).displaceNode1Label(8, -29),
+        new Flow(turbine1.flowOutlets[1], burner2.flowOutlets[0]).flip().displaceNode1Label(15, 20),
+        new Flow(burner2.flowOutlets[1], turbine2.flowOutlets[0]).displaceNode1Label(15, -30),
+        new Flow(turbine2.flowOutlets[1], exhaust.flowOutlets[0]).flip().displaceNode1Label(12, -18)
+    ];
+
+    showTemperaturePressure(flows);
 
     let shaft = new Shaft();
     shaft.addCoupling(compressor.shaftCouplings[0]);
@@ -120,12 +139,16 @@ function buildSingleShaftRegeneration(){
 
     exhaust.turn(2);
 
-    new Flow(intake.flowOutlets[0], compressor.flowOutlets[0]).displaceNode1Label(16, -31);
-    new Flow(compressor.flowOutlets[1], regenerator.flowOutlets[0]).flip().displaceNode1Label(16, -31);
-    new Flow(regenerator.flowOutlets[1], burner.flowOutlets[0]).flip().flip().displaceNode1Label(11, 30);
-    new Flow(burner.flowOutlets[1], turbine.flowOutlets[0]).displaceNode1Label(25, -60);
-    new Flow(turbine.flowOutlets[1], regenerator.flowOutlets[2]).flip().displaceNode1Label(15, -20);
-    new Flow(regenerator.flowOutlets[3], exhaust.flowOutlets[0]).flip().flip().displaceNode1Label(15, -50);
+    let flows = [
+        new Flow(intake.flowOutlets[0], compressor.flowOutlets[0]).displaceNode1Label(16, -31),
+        new Flow(compressor.flowOutlets[1], regenerator.flowOutlets[0]).flip().displaceNode1Label(16, -31),
+        new Flow(regenerator.flowOutlets[1], burner.flowOutlets[0]).flip().flip().displaceNode1Label(11, 30),
+        new Flow(burner.flowOutlets[1], turbine.flowOutlets[0]).displaceNode1Label(25, -60),
+        new Flow(turbine.flowOutlets[1], regenerator.flowOutlets[2]).flip().displaceNode1Label(15, -20),
+        new Flow(regenerator.flowOutlets[3], exhaust.flowOutlets[0]).flip().flip().displaceNode1Label(15, -50)
+    ];
+
+    showTemperaturePressure(flows);
 
     let shaft = new Shaft();
     shaft.addCoupling(compressor.shaftCouplings[0]);
@@ -161,15 +184,19 @@ function buildMultiShaftFlowDistributed() {
     crossPoint.position = new Point(342, 275);
     crossPoint.turn();
 
-    new Flow(intake.flowOutlets[0], compressor.flowOutlets[0]).displaceNode1Label(16, -31);
-    new Flow(compressor.flowOutlets[1], crossPoint.flowOutlets[0]).displaceNode1Label(11, -40);
-    new Flow(crossPoint.flowOutlets[1], burner.flowOutlets[0]).flip().flip().displaceNode1Label(26, -30);
-    new Flow(burner.flowOutlets[1], turbine.flowOutlets[0]).displaceNode1Label(8, -29);
-    new Flow(turbine.flowOutlets[1], exhaust.flowOutlets[0]).flip().displaceNode1Label(10, -35);
-    
-    new Flow(crossPoint.flowOutlets[2], burner2.flowOutlets[0]).flip().displaceNode1Label(-90, 7);
-    new Flow(burner2.flowOutlets[1], turbine2.flowOutlets[0]).displaceNode1Label(8, -29);
-    new Flow(turbine2.flowOutlets[1], exhaust2.flowOutlets[0]).flip().displaceNode1Label(10, -36);
+    let flows = [
+        new Flow(intake.flowOutlets[0], compressor.flowOutlets[0]).displaceNode1Label(16, -31),
+        new Flow(compressor.flowOutlets[1], crossPoint.flowOutlets[0]).displaceNode1Label(11, -40),
+        new Flow(crossPoint.flowOutlets[1], burner.flowOutlets[0]).flip().flip().displaceNode1Label(26, -30),
+        new Flow(burner.flowOutlets[1], turbine.flowOutlets[0]).displaceNode1Label(8, -29),
+        new Flow(turbine.flowOutlets[1], exhaust.flowOutlets[0]).flip().displaceNode1Label(10, -35),
+        
+        new Flow(crossPoint.flowOutlets[2], burner2.flowOutlets[0]).flip().displaceNode1Label(-90, 7),
+        new Flow(burner2.flowOutlets[1], turbine2.flowOutlets[0]).displaceNode1Label(8, -29),
+        new Flow(turbine2.flowOutlets[1], exhaust2.flowOutlets[0]).flip().displaceNode1Label(10, -36)
+    ];
+
+    showTemperaturePressure(flows);
 
     let shaft = new Shaft();
     shaft.addCoupling(compressor.shaftCouplings[0]);
@@ -197,7 +224,74 @@ function buildSteamCycleSimple() {
     condenser.position = new Point(550, 320);
     load.position = new Point(620, 175);
 
-    new Flow(pump.flowOutlets[1], boiler.flowOutlets[0])
+    let flows = [
+        new Flow(pump.flowOutlets[1], boiler.flowOutlets[0])
+            .displaceNode1Label(-80, -30)
+            .displaceNode2Label(-80, 20),
+
+        new Flow(boiler.flowOutlets[1], turbine.flowOutlets[0])
+            .flip()
+            .displaceNode1Label(12, -30)
+            .displaceNode2Label(-80, -30),
+
+        new Flow(turbine.flowOutlets[1], condenser.flowOutlets[0])
+            .flip().flip().flip()
+            .displaceNode1Label(-80, 20)
+            .displaceNode2Label(10, -30),
+
+        new Flow(condenser.flowOutlets[1], pump.flowOutlets[0])
+            .flip()
+            .displaceNode1Label(10, 20)
+            .displaceNode2Label(5, 20)
+    ]
+
+    showTemperaturePressure(flows);
+    flows[0].displayNode1Props(["p", "m"]);
+
+    let shaft = new Shaft();
+    shaft.addCoupling(turbine.shaftCouplings[0]);
+    shaft.addCoupling(load.shaftCouplings[0]);
+}
+
+function buildSteamCycleRegenerative2() {
+    
+    let pump = new Device("pump");
+    let pump2 = new Device("pump");
+    let boiler = new Device("boiler");
+    let turbine = new Device("steam_turbine");
+    let turbine2 = new Device("steam_turbine");
+    let crossPoint = new CrossPoint(FlowType.Pipe);
+    let cwHeater = new Device("closed_feed_heater");
+    let mixChamber = new Device("mixing_chamber");
+    let condenser = new Device("condenser");
+    let load = new Device("generator");
+
+    pump.turn(2);
+    pump2.turn(2);
+    mixChamber.turn(2);
+    boiler.turn(2);
+
+    pump.position = new Point(665, 460);
+    pump2.position = new Point(380, 460);
+    boiler.position = new Point(46, 235);
+    turbine.position = new Point(247, 160);
+    turbine2.position = new Point(543,160);
+    condenser.position = new Point(765, 330);
+    cwHeater.position = new Point(490, 340);
+    mixChamber.position = new Point(231, 340);
+    load.position = new Point(725, 170);
+    crossPoint.position = new Point(415, 110);
+
+    pump.model.ep = null;
+    pump.model.mp = 10.0;
+
+    pump2.model.ep = null;
+    pump2.model.mp = 5.0;
+
+    turbine.model.ep = 4000;
+    mixChamber.model.p = 16000;
+    
+    new Flow(mixChamber.flowOutlets[2], boiler.flowOutlets[0])
         .displaceNode1Label(-80, -30)
         .displaceNode2Label(-80, 20)
         .displayNode1Props(["p", "m"]);
@@ -207,7 +301,17 @@ function buildSteamCycleSimple() {
         .displaceNode1Label(12, -30)
         .displaceNode2Label(-80, -30);
 
-    new Flow(turbine.flowOutlets[1], condenser.flowOutlets[0])
+    new Flow(turbine.flowOutlets[1], crossPoint.flowOutlets[0])
+        .flip().flip()
+        .displaceNode1Label(-80, 20)
+        .displaceNode2Label(10, -30);
+
+    new Flow(crossPoint.flowOutlets[1], turbine2.flowOutlets[0])
+        .flip().flip()
+        .displaceNode1Label(-80, 20)
+        .displaceNode2Label(10, -30);
+
+    new Flow(turbine2.flowOutlets[1], condenser.flowOutlets[0])
         .flip().flip().flip()
         .displaceNode1Label(-80, 20)
         .displaceNode2Label(10, -30);
@@ -216,9 +320,35 @@ function buildSteamCycleSimple() {
         .flip()
         .displaceNode1Label(10, 20)
         .displaceNode2Label(5, 20);
+    
+    new Flow(pump.flowOutlets[1], cwHeater.flowOutlets[2])
+        .flip().flip()
+        .displaceNode1Label(10, 20)
+        .displaceNode2Label(5, 20);
+    
+    new Flow(cwHeater.flowOutlets[3], mixChamber.flowOutlets[1])
+        .flip().flip()
+        .displaceNode1Label(10, 20)
+        .displaceNode2Label(5, 20);
+
+    new Flow(crossPoint.flowOutlets[2], cwHeater.flowOutlets[0])
+        .flip().flip().flip()
+        .displaceNode1Label(10, 20)
+        .displaceNode2Label(5, 20);
+
+    new Flow(cwHeater.flowOutlets[1], pump2.flowOutlets[0])
+        .flip()
+        .displaceNode1Label(10, 20)
+        .displaceNode2Label(5, 20);
+
+    new Flow(pump2.flowOutlets[1], mixChamber.flowOutlets[0])
+        .flip().flip()
+        .displaceNode1Label(10, 20)
+        .displaceNode2Label(5, 20);
 
     let shaft = new Shaft();
     shaft.addCoupling(turbine.shaftCouplings[0]);
+    shaft.addCoupling(turbine2.shaftCouplings[0]);
     shaft.addCoupling(load.shaftCouplings[0]);
 }
     
@@ -243,6 +373,9 @@ function buildConfiguration(index) {
             break;
         case 5:
             buildSteamCycleSimple();
+            break;
+        case 6:
+            buildSteamCycleRegenerative2();
             break;
     }
 }

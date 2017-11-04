@@ -163,7 +163,7 @@ export class Flow {
             hl: 0.0,
             m: null
         } : null;
-        
+
         if (from.direction != FlowDirection.OUT ||
             to.direction != FlowDirection.IN) {
             throw "Can't create flow from those outlets.";
@@ -177,7 +177,7 @@ export class Flow {
         this.childrens = [];
         this.node = new ThermalNode(this);
         this.node2 = (to.type == FlowType.Pipe)
-            ? new ThermalNode(this, ThermalLabelLocation.End) 
+            ? new ThermalNode(this, ThermalLabelLocation.End)
             : null;
 
         this.label = new PointText();
@@ -193,7 +193,7 @@ export class Flow {
         this.render();
     }
 
-    getType(){
+    getType() {
         return this.srcOutlet.type;
     }
 
@@ -207,11 +207,17 @@ export class Flow {
 
     getContinuedFlows(exclude) {
 
-        let dvc = this.destOutlet.device;
+        let destP = this.destOutlet;
+        let dvc = destP.device;
+
         let contOps = dvc.flowOutlets.filter(op => {
             return op.direction == FlowDirection.OUT && op.isConnected();
         }).filter(op => {
-            return (exclude) ? exclude.indexOf(op.flow) == -1 : true;
+
+            let si = dvc.flowOutlets.indexOf(destP);
+            let oi = dvc.flowOutlets.indexOf(op);
+            let after = (oi > si);
+            return (exclude) ? exclude.indexOf(op.flow) == -1 && after : after;
         }).map(op => { return op.flow; });
 
         return contOps;
@@ -223,7 +229,7 @@ export class Flow {
         this.childrens.map(child => child.remove());
         this.childrens = null;
         this.node.remove();
-        if(this.node2) { this.node2.remove() }
+        if (this.node2) { this.node2.remove() }
 
         this.label.remove();
         this.srcOutlet.disconnect();
@@ -235,19 +241,19 @@ export class Flow {
 
     flip() {
 
-        let index = (this.pathIndex + 1 < PathDrawers.length) 
+        let index = (this.pathIndex + 1 < PathDrawers.length)
             ? this.pathIndex + 1 : 0;
 
         this.setPathIndex(index);
         return this;
     }
 
-    setPathIndex(index){
+    setPathIndex(index) {
         this.pathDrawer = PathDrawers[index];
         this.pathIndex = index;
         this.render();
 
-        if(this.isSelected){
+        if (this.isSelected) {
             this.unselect();
             this.select();
         }
@@ -265,9 +271,9 @@ export class Flow {
         return this;
     }
 
-    displayNode1Props(props){
+    displayNode1Props(props) {
 
-        for(var p in this.node.label.fields){
+        for (var p in this.node.label.fields) {
 
             let field = this.node.label.fields[p];
             field.visible = (props.indexOf(p) > -1);
@@ -276,20 +282,21 @@ export class Flow {
         this.refreshNodes();
     }
 
-    displayNode2Props(props){
-        
-        for(var p in this.node2.label.fields){
-            
-            let field = this.node2.label.fields[p];
-            field.visible = (props.indexOf(p) > -1);
+    displayNode2Props(props) {
+
+        if (this.node2) {
+            for (var p in this.node2.label.fields) {
+
+                let field = this.node2.label.fields[p];
+                field.visible = (props.indexOf(p) > -1);
+            }
+            this.refreshNodes();
         }
-        
-        this.refreshNodes();
     }
 
     refreshNodes() {
         this.node.refresh();
-        if(this.node2) { this.node2.refresh() }
+        if (this.node2) { this.node2.refresh() }
     }
 
     render() {
@@ -321,7 +328,7 @@ export class Flow {
         this.node.position = p1.add(pnn);
         this.node.update();
 
-        if(this.node2){
+        if (this.node2) {
 
             let pnn2 = pe.subtract(p2).normalize().multiply(20);
             this.node2.firstChild.fillColor = color;
@@ -383,8 +390,8 @@ export class Flow {
     }
 
     unselect() {
-        if (this.border) { 
-            this.border.remove(); 
+        if (this.border) {
+            this.border.remove();
             this.border = null;
             this.isSelected = false
         }
@@ -436,22 +443,26 @@ class ThermalLabel extends Paper.Group {
         this.node = node;
         this.location = loc;
 
-        this.fields = { 
-            t: {label: "T", visible: true}, 
-            p: {label: "P", visible: true}, 
-            m: {label: "ṁ", visible: false}, 
-            h: {label: "h", visible: false}, 
-            s: {label: "s", visible: false}, 
-            x: {label: "x", visible: false} 
+        this.fields = {
+            t: { label: "T", visible: false },
+            p: { label: "P", visible: false },
+            m: { label: "ṁ", visible: false },
+            h: { label: "h", visible: false },
+            s: { label: "s", visible: false },
+            x: { label: "x", visible: false }
         };
 
+        let color = (node.flow.getType() == FlowType.Stream)
+            ? new Color(.9, .3, .1)
+            : new Color(.4, .4, .4);
+
         this.labels = {};
-        this.labels.t = createThermalField(0);
-        this.labels.p = createThermalField();
-        this.labels.m = createThermalField();
-        this.labels.h = createThermalField();
-        this.labels.s = createThermalField();
-        this.labels.x = createThermalField();
+        this.labels.t = createThermalField(color);
+        this.labels.p = createThermalField(color);
+        this.labels.m = createThermalField(color);
+        this.labels.h = createThermalField(color);
+        this.labels.s = createThermalField(color);
+        this.labels.x = createThermalField(color);
         this.pivot = new Point(0, 0);
 
         this.on("mousedrag", this.dragHandler);
@@ -463,7 +474,7 @@ class ThermalLabel extends Paper.Group {
         let dp = this.node.labelDisplacement;
         this.node.labelDisplacement = dp.add(e.delta);
         this.drawLine();
-        console.log(this.node.labelDisplacement);
+        //console.log(this.node.labelDisplacement);
     }
 
     remove() {
@@ -475,21 +486,24 @@ class ThermalLabel extends Paper.Group {
 
         if (this.line) { this.line.remove(); }
 
-        let p1 = this.node.position;
-        let p2 = geometry.nearestCornerToPoint(this.bounds, p1);
-        p2 = p2.subtract(p2.subtract(p1).normalize().multiply(2));
+        if (this.bounds.width > 0) {
 
-        let line = new Paper.Path.Line(p1, p2);
-        line.strokeColor = new Color(0, 0, 0, 0.35);
-        line.dashArray = [3, 2];
+            let p1 = this.node.position;
+            let p2 = geometry.nearestCornerToPoint(this.bounds, p1);
+            p2 = p2.subtract(p2.subtract(p1).normalize().multiply(2));
 
-        this.line = line;
+            let line = new Paper.Path.Line(p1, p2);
+            line.strokeColor = new Color(0, 0, 0, 0.35);
+            line.dashArray = [3, 2];
+
+            this.line = line;
+        }
     }
 
     update(flow) {
 
         let res = flow.results;
-        if(res && flow.getType() == FlowType.Pipe){
+        if (res && flow.getType() == FlowType.Pipe) {
             res = (this.location == ThermalLabelLocation.Start)
                 ? res.inlet
                 : res.outlet;
@@ -503,9 +517,9 @@ class ThermalLabel extends Paper.Group {
             let field = this.fields[prop];
             let label = this.labels[prop];
 
-            if(field.visible){
+            if (field.visible) {
                 let unit = diagram.selectedUnits[prop];
-                let val = ( res[prop] ) ? unit.printWithLabel( res[prop] ) : "0.000 " + unit.label;
+                let val = (res[prop]) ? unit.printWithLabel(res[prop]) : "0.000 " + unit.label;
 
                 label.content = field.label + ": " + val;
                 label.point = this.position.add(new Point(0, ty));
@@ -522,11 +536,11 @@ class ThermalLabel extends Paper.Group {
     }
 }
 
-function createThermalField() {
+function createThermalField(color) {
 
     var field = new Paper.PointText();
     field.fontSize = 12;
-    field.fillColor = "red";
+    field.fillColor = color;
     field.point = new Point(0, 0);
     field.remove();
 

@@ -435,7 +435,6 @@ export let deviceConfigurations = {
         ],
         outlets: [
             new OutletConfig(FlowType.Pipe, FlowDirection.IN, 30, 0),
-            new OutletConfig(FlowType.Pipe, FlowDirection.OUT, 30, 50),
             new OutletConfig(FlowType.Pipe, FlowDirection.IN, 60, 25),
             new OutletConfig(FlowType.Pipe, FlowDirection.OUT, 0, 25)
         ]

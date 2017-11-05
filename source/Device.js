@@ -1,5 +1,3 @@
-import React from "react";
-import ReactDOM from "react-dom";
 import Paper from "paper";
 import { deviceConfigurations } from "./Setup";
 import * as diagram from "./Diagram";

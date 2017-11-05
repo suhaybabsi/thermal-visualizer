@@ -1,5 +1,5 @@
 import Device from "./Device";
-import * as drawing from "./Drawing";
+import * as builders from "./Builders";
 import { OutletConfig } from "./Setup";
 import { FlowDirection } from "./Flow";
 
@@ -12,7 +12,7 @@ export default class CrossPoint extends Device {
         super("extraction", {}, {
             name: "Cross Point",
             abbrev: null,
-            build: drawing.outlineCircle(new Color(.9, .3, .1, .8), 3, w),
+            build: builders.outlineCircle(new Color(.9, .3, .1, .8), 3, w),
             fields: [],
             outlets: [
                 new OutletConfig(flowType, FlowDirection.IN, -n, w),

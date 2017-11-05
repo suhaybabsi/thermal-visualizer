@@ -1,6 +1,8 @@
+![alt text](https://thermal-visualizer.herokuapp.com/visualizer/img/gas_turbine_sample.png)
+
 # Thermal-visualizer
 
-A research visual tool to model and analyze thermal systems. Emphasizing on calculation aspects. 
+A research visual tool to model and analyze thermal systems. Emphasizing on calculation aspects.
 
 [View The Tool Online](https://thermal-visualizer.herokuapp.com/visualizer)
 

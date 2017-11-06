@@ -188,7 +188,7 @@ export class Flow {
         diagram.addFlow(this);
     }
 
-    setIndex(i) {
+    setNumber(i) {
         this.number = i;
         this.render();
     }

@@ -138,8 +138,7 @@ function calculateModel() {
                 t_shaft.results = shaft;
             });
         }
-
-        console.log(diagram.devices);
+        
         Actions.modelCalculated();
 
         trackProps.success = "PASS";

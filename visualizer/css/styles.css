@@ -366,4 +366,21 @@ body {
     box-shadow: 0 3pt 3pt grey;
     z-index: 50;
 }
-    
+
+.chart-control {
+    display: inline-block;
+    height: 70px;
+    text-align: center;
+}
+
+.chart-control > div {
+
+    display: inline-block;
+}
+
+div.f-label {
+
+    position: relative;
+    margin-left: 10pt;
+    margin-right: 5pt;
+}

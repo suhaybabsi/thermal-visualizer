@@ -102,12 +102,12 @@ function executeListenersOfEvent(e_name, e_data) {
 
 export function update() {
 
-    flows.map(flow  => {
+    flows.map(flow => {
         flow.render();
         flow.refreshNodes();
     });
 
-    shafts.map( shaft => {
+    shafts.map(shaft => {
         shaft.showResults();
     });
 
@@ -615,6 +615,7 @@ export function clear() {
     _shafts.map(shaft => shaft.delete());
     _flows.map(flow => flow.remove());
     _devices.map(dvc => dvc.remove());
+    flowPaths.splice(0);
 }
 
 export function deleteDevice(device) {
@@ -683,7 +684,7 @@ export function prepareSystemModel() {
         let src_op_index = src_dvc.flowOutlets.indexOf(src_op);
         let dest_op_index = dest_dvc.flowOutlets.indexOf(dest_op);
         let type = (src_op.type == FlowType.Stream) ? "stream" : "pipe";
-        let props =flow.model;
+        let props = flow.model;
 
         return {
             type,
@@ -708,9 +709,10 @@ export function prepareSystemModel() {
     return model;
 }
 
-
+export let flowPaths = [];
 export function updateFlowPaths() {
 
+    flows.map(flow => flow.number = 0);
     let initialDevices = devices.filter(dvc => {
 
         let connectedInlets = dvc.flowOutlets.filter(op => {
@@ -720,17 +722,19 @@ export function updateFlowPaths() {
         return dvc.flowOutlets.length > 0 && connectedInlets.length == 0;
     });
 
-    if(initialDevices.length == 0){
+    if (initialDevices.length == 0) {
         initialDevices.push(devices[0]);
     }
 
-    var flowsPath = [];
+    var paths = [];
     initialDevices.map(dvc => {
 
         let outletFlows = dvc.flowOutlets
             .filter(op => op.isConnected() && op.direction == FlowDirection.OUT)
             .map(op => { return op.flow; });
 
+        let possiblePaths = [];
+        let flowsPath = [];
         let restFlows = [];
         let recognizePath = function (flow) {
 
@@ -743,9 +747,13 @@ export function updateFlowPaths() {
                 if (_flows.length > 0) {
 
                     cflow = _flows[0];
-                    flowsPath.push(cflow);
-                    _flows.splice(1).map(fl => restFlows.push(fl));
+                    
+                    _flows.splice(1).map(fl => {
+                        restFlows.push(fl)
+                        possiblePaths.push({ flow: fl, path: [...flowsPath] });
+                    });
 
+                    flowsPath.push(cflow);
                 } else {
 
                     break;
@@ -761,14 +769,28 @@ export function updateFlowPaths() {
             recognizePath(flow);
         });
 
+        paths.push(flowsPath);
+
         while (restFlows.length > 0) {
             let flow = restFlows[0];
             restFlows.splice(0);
+
+            let ppaths = possiblePaths.filter(poss => {
+                return poss.flow == flow;
+            });
+
+            flowsPath = (ppaths.length > 0) ? ppaths[0].path : [];
             recognizePath(flow);
+            paths.push(flowsPath);
         }
     });
 
-    flowsPath.map((flow, i) => {
-        flow.setIndex(i + 1);
-    });
+    let f_index = 1;
+    paths.map(path => path.map((flow, i) => {
+        if (flow.number == 0) {
+            flow.setNumber(f_index++);
+        }
+    }));
+    
+    flowPaths = paths;
 }

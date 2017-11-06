@@ -23,7 +23,7 @@ The app should now be running on [localhost:8081](http://localhost:8081/).
 
 ## Adding More Devices
 
-Please have a look at the way devices are defined in file `source/Setup.js`. All device definitions are assigned to object [`deviceConfigurations`](https://github.com/suhaybabsi/thermal-visualizer/blob/ca8db42bec38d5abd505687249df254bea441945/source/Setup.js#L186). See example below:
+Please have a look at the way devices are defined in file `source/Setup.js`. All device definitions are assigned to properties on object [`deviceConfigurations`](https://github.com/suhaybabsi/thermal-visualizer/blob/ca8db42bec38d5abd505687249df254bea441945/source/Setup.js#L186). See example below:
 
 ```javascript
 compressor: {

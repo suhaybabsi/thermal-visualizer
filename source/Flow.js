@@ -368,8 +368,15 @@ export class Flow {
         this.pathDrawer(bPath, p1, p2);
         bPath.sendToBack();
 
+        this.insureSelection();
         this.childrens.push(path, arrow, bPath);
         diagram.baseLayer.activate();
+    }
+
+    insureSelection(){
+        if(this.isSelected){
+            this.select();
+        }
     }
 
     select() {

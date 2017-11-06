@@ -291,6 +291,13 @@ body {
 .results-content {
     padding: 10px 10px 10px 10px;
     background: white;
+
+    position: relative;
+    display: inline-block;
+
+    width: 100%;
+    height: auto;
+    overflow-y: scroll;
 }
 
 .panel-footer {
@@ -370,7 +377,6 @@ body {
 .chart-control {
     display: inline-block;
     height: 70px;
-    text-align: center;
 }
 
 .chart-control > div {

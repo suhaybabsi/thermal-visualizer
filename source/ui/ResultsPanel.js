@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import RC2 from "react-chartjs2";
 import * as diagram from "../Diagram";
-import { units } from "../Setup";
+import { units, cycles } from "../Setup";
 import { FlowType } from "../Flow";
 import ComboBox from "./components/ComboBox";
 import dispatcher from "../Dispatcher";
@@ -44,22 +44,40 @@ let chartData = {
 };
 
 export default class ResultsPanel extends React.Component {
+    
+    
+    componentDidMount(){
+        this.windowResized();
+        $(window).resize(this.windowResized.bind(this));
+    }
+
+    windowResized(e){
+        let node = ReactDOM.findDOMNode(this);
+        let height = $(window).height();
+        let mh = Math.max(100, height - 200);
+        $(".results-content", node).css("max-height", mh);
+    }
+
+    componentWillUnmount(){
+
+        $(window).off("resize", this.windowResized);
+    }
 
     componentWillMount() {
 
         let pathNames = constructPathNames(diagram.flowPaths);
         this.pathItems = diagram.flowPaths.map((path, i) => {
-            return {name: pathNames[i], path};
+            return { name: pathNames[i], path };
         });
 
-        if(this.pathItems.length == 0){
-            this.pathItems.push({name: "N/A", path:[]});
+        if (this.pathItems.length == 0) {
+            this.pathItems.push({ name: "N/A", path: [] });
         }
 
         let pathItem = this.pathItems[0];
         let item = chartItems[0];
 
-        this.prepareData( pathItem.path, item);
+        this.prepareData(pathItem.path, item);
         this.setState({ chartItem: item, pathItem });
 
         this.regId = dispatcher.register(this.handleActions.bind(this));
@@ -119,7 +137,7 @@ export default class ResultsPanel extends React.Component {
         this.setState({ chartItem: item });
     }
 
-    pathItemChanged(item){
+    pathItemChanged(item) {
 
         let { path } = item;
         this.prepareData(path, this.state.chartItem);
@@ -127,6 +145,37 @@ export default class ResultsPanel extends React.Component {
     }
 
     render() {
+
+        let type = diagram.cycleInfo.type;
+        let results = diagram.cycleInfo.results;
+        let cycle = cycles[type];
+
+        let cycleTable;
+        if (cycle && results) {
+
+            let rows = [];
+            for (var p in cycle) {
+                let prop = cycle[p];
+
+                let title = prop.title;
+                let unit = prop.units[0];
+                let value = results[p];
+                value = unit.printWithLabel(value);
+                rows.push(
+                    <tr key={rows.length}>
+                        <td dangerouslySetInnerHTML={{ __html: title}}></td>
+                        <td>{value}</td>
+                    </tr>
+                );
+            }
+
+            cycleTable = rows.length > 0 ? (
+                <div class="cycle-table">
+                    <label>  > Performance</label><br/><br/>
+                    <table class="table"><tbody>{rows}</tbody></table>
+                </div>
+            ) : null;
+        }
 
         return (
             <div class="results-container">
@@ -136,13 +185,15 @@ export default class ResultsPanel extends React.Component {
                     </button>
                 </div>
                 <div class="results-content">
+                    {cycleTable}
                     <div class="chart-control">
+                        <label>  > Charts</label><br/><br/>
                         <div class="f-label">Flow Path</div>
                         <ComboBox value={this.state.pathItem} items={this.pathItems} onChange={this.pathItemChanged.bind(this)} />
                         <div class="f-label">Property</div>
                         <ComboBox value={this.state.chartItem} items={chartItems} onChange={this.chartItemChanged.bind(this)} />
                     </div>
-                    <br />
+                    <br /><br/><br/>
                     <RC2 data={chartData} options={chartOptions} type='line' />
                 </div>
                 <div class="panel-footer" />
@@ -155,17 +206,17 @@ function constructPathNames(paths) {
 
     let names = [];
     paths.map(path => {
-        
+
         let groups = [];
         let num_s = path[0].number;
-        let num_e = path[path.length-1].number;
+        let num_e = path[path.length - 1].number;
 
         var start = num_s, num = num_s;
         var last = null;
-        for(var i = 1; i < path.length; i++){
+        for (var i = 1; i < path.length; i++) {
 
             let flow = path[i];
-            if(flow.number != (num + 1) ){
+            if (flow.number != (num + 1)) {
 
                 groups.push([start, num])
                 start = flow.number;
@@ -174,23 +225,23 @@ function constructPathNames(paths) {
 
                 num += 1;
             }
-            
-            if(i == path.length - 1 && num == flow.number){
+
+            if (i == path.length - 1 && num == flow.number) {
                 groups.push([start, num]);
                 start = null;
             }
         }
 
         var name = "";
-        for(var g in groups){
+        for (var g in groups) {
             let group = groups[g];
             groups[g] = group.join(" .. ");
         }
 
         name += groups.join(" > ");
         name += (start) ? ">" + start : "";
-        
-        names.push( name );
+
+        names.push(name);
     });
 
     return names;

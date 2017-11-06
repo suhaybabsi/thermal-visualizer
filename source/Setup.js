@@ -466,3 +466,23 @@ export let deviceConfigurations = {
         ]
     }
 };
+
+export let cycles = {
+
+    gas_turbine: {
+        wnet: {title:'Net Work (W<sub>net</sub>)', units: units.w},
+        fc: {title:'Fuel Consumption', units: units.m},
+        sfc: {title:'Specific Fuel Consumption (SFC)', units: [new Unit("kg/kWh")] },
+        nth: {title:'Thermal Efficiency (η<sub>th</sub>)', units: [percentUnit] },
+    },
+
+    steam_turbine: {
+        wnet: {title:'Net Work (W<sub>net</sub>)', units: units.w},
+        nth: {title:'Thermal Efficiency (η<sub>th</sub>)', units: [percentUnit] },
+    },
+
+    turbojet: {
+        tsfc: {title:'Thrust Specific Fuel Consumption (TSFC)', units: [new Unit("kg/h/N")]},
+        thrust: {title:'Thrust (F)', units: [new Unit("N")] },
+    },
+}

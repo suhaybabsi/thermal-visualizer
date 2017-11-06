@@ -17,7 +17,8 @@ export var selectedUnits = {},
     flowLayer,
     baseLayer,
     overlayLayer,
-    gridLayer;
+    gridLayer,
+    cycleInfo = {};
 
 export function addDevice(device) {
     baseLayer.addChild(device);

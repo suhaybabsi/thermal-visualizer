@@ -116,7 +116,7 @@ function calculateModel() {
         }, 1000);
 
         console.log(res);
-        let { devices, flows, shafts } = res;
+        let { devices, flows, shafts, performance } = res;
 
         if (devices) {
             devices.map((dvc, i) => {
@@ -139,6 +139,8 @@ function calculateModel() {
             });
         }
         
+        diagram.cycleInfo.type = res.type;
+        diagram.cycleInfo.results = performance;
         Actions.modelCalculated();
 
         trackProps.success = "PASS";

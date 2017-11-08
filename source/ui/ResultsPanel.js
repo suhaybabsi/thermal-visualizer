@@ -43,22 +43,43 @@ let chartData = {
     }]
 };
 
+let cycleOptions = {
+    legend: { display: false },
+    title: { display: true, text: 'HS Diagram', position: "top" },
+    scales: {
+        xAxes: [{ scaleLabel: {display: true, labelString: 'Entropy (s) - kJ/kg'}, 
+                type: 'linear', min: 0, max: 6 }],
+        yAxes: [{ scaleLabel: {display: true, labelString: 'Enthalpy (h) - kJ/kg'}, 
+                type: 'linear', min: 0, max: 6 }]
+    }
+};
+
+let cycleData = {
+    labels: ["Stream"],
+    datasets: [{
+        label: "Enthalpy",
+        lineTension: 0,
+        fill: false,
+        borderColor: 'rgb(255, 99, 132)',
+        data: [],
+    }]
+};
+
 export default class ResultsPanel extends React.Component {
-    
-    
-    componentDidMount(){
+
+    componentDidMount() {
         this.windowResized();
         $(window).resize(this.windowResized.bind(this));
     }
 
-    windowResized(e){
+    windowResized(e) {
         let node = ReactDOM.findDOMNode(this);
         let height = $(window).height();
         let mh = Math.max(100, height - 200);
         $(".results-content", node).css("max-height", mh);
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
 
         $(window).off("resize", this.windowResized);
     }
@@ -101,6 +122,7 @@ export default class ResultsPanel extends React.Component {
         chartUnit = item.unit;
         chartOptions.title.text = item.name + " [" + item.unit.label + "]";
 
+        var processData = [];
         var labels = [];
         var dataList = [];
         path.slice().sort((a, b) => {
@@ -118,10 +140,16 @@ export default class ResultsPanel extends React.Component {
                 labels.push(flow.number + "");
                 dataList.push(val);
             }
+
+            let hVal = Number( units.x[0].print(res.h) );
+            let sVal = Number( units.x[0].print(res.s) );
+
+            processData.push({x: sVal, y: hVal});
         });
 
         chartData.labels = labels;
         chartData.datasets[0].data = dataList;
+        cycleData.datasets[0].data = processData;
     }
 
     closePanel() {
@@ -163,7 +191,7 @@ export default class ResultsPanel extends React.Component {
                 value = unit.printWithLabel(value);
                 rows.push(
                     <tr key={rows.length}>
-                        <td dangerouslySetInnerHTML={{ __html: title}}></td>
+                        <td dangerouslySetInnerHTML={{ __html: title }}></td>
                         <td>{value}</td>
                     </tr>
                 );
@@ -171,7 +199,7 @@ export default class ResultsPanel extends React.Component {
 
             cycleTable = rows.length > 0 ? (
                 <div class="cycle-table">
-                    <label>  > Performance</label><br/><br/>
+                    <label>  > Performance</label><br /><br />
                     <table class="table"><tbody>{rows}</tbody></table>
                 </div>
             ) : null;
@@ -187,14 +215,16 @@ export default class ResultsPanel extends React.Component {
                 <div class="results-content">
                     {cycleTable}
                     <div class="chart-control">
-                        <label>  > Charts</label><br/><br/>
+                        <label>  > Charts</label><br /><br />
                         <div class="f-label">Flow Path</div>
                         <ComboBox value={this.state.pathItem} items={this.pathItems} onChange={this.pathItemChanged.bind(this)} />
                         <div class="f-label">Property</div>
                         <ComboBox value={this.state.chartItem} items={chartItems} onChange={this.chartItemChanged.bind(this)} />
                     </div>
-                    <br /><br/><br/>
+                    <br /><br /><br />
                     <RC2 data={chartData} options={chartOptions} type='line' />
+                    <br /><br />
+                    <RC2 data={cycleData} options={cycleOptions} type='line' />
                 </div>
                 <div class="panel-footer" />
             </div>

@@ -47,10 +47,14 @@ let cycleOptions = {
     legend: { display: false },
     title: { display: true, text: 'HS Diagram', position: "top" },
     scales: {
-        xAxes: [{ scaleLabel: {display: true, labelString: 'Entropy (s) - kJ/kg'}, 
-                type: 'linear', min: 0, max: 6 }],
-        yAxes: [{ scaleLabel: {display: true, labelString: 'Enthalpy (h) - kJ/kg'}, 
-                type: 'linear', min: 0, max: 6 }]
+        xAxes: [{
+            scaleLabel: { display: true, labelString: 'Entropy (s) - kJ/kg' },
+            type: 'linear', min: 0, max: 6
+        }],
+        yAxes: [{
+            scaleLabel: { display: true, labelString: 'Enthalpy (h) - kJ/kg' },
+            type: 'linear', min: 0, max: 6
+        }]
     }
 };
 
@@ -82,9 +86,16 @@ export default class ResultsPanel extends React.Component {
     componentWillUnmount() {
 
         $(window).off("resize", this.windowResized);
+        dispatcher.unregister(this.regId);
     }
 
     componentWillMount() {
+
+        this.reinitializeData();
+        this.regId = dispatcher.register(this.handleActions.bind(this));
+    }
+
+    reinitializeData() {
 
         let pathNames = constructPathNames(diagram.flowPaths);
         this.pathItems = diagram.flowPaths.map((path, i) => {
@@ -100,23 +111,16 @@ export default class ResultsPanel extends React.Component {
 
         this.prepareData(pathItem.path, item);
         this.setState({ chartItem: item, pathItem });
-
-        this.regId = dispatcher.register(this.handleActions.bind(this));
-    }
-
-    componentWillUnmount() {
-        dispatcher.unregister(this.regId);
     }
 
     handleActions(action) {
         switch (action.type) {
             case "MODEL_CALCULATED":
-                this.prepareData(this.state.chartItem);
-                this.forceUpdate();
+                this.reinitializeData();
                 break;
         }
     }
-
+    
     prepareData(path, item) {
 
         chartUnit = item.unit;
@@ -141,10 +145,10 @@ export default class ResultsPanel extends React.Component {
                 dataList.push(val);
             }
 
-            let hVal = Number( units.x[0].print(res.h) );
-            let sVal = Number( units.x[0].print(res.s) );
+            let hVal = Number(units.x[0].print(res.h));
+            let sVal = Number(units.x[0].print(res.s));
 
-            processData.push({x: sVal, y: hVal});
+            processData.push({ x: sVal, y: hVal });
         });
 
         chartData.labels = labels;

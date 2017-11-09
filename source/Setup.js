@@ -467,6 +467,11 @@ export let deviceConfigurations = {
     }
 };
 
+export const pipeFields = [
+    new Field("pl", "Pressure Loss", 0.0, FieldType.UNIT, percentUnit),
+    new Field("hl", "Heat Loss", 0.0, FieldType.UNIT, percentUnit)
+]
+
 export let cycles = {
 
     gas_turbine: {

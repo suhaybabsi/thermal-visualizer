@@ -3,7 +3,7 @@ import * as diagram from "./Diagram";
 import * as drawing from "./Drawing";
 import * as geometry from "./Geometry";
 import * as Actions from "./Actions";
-import { units } from "./Setup";
+import { pipeFields } from "./Setup";
 
 export const FlowType = {
     Stream: 0,
@@ -158,10 +158,10 @@ export class Flow {
         this.pathDrawer = PathDrawers[0];
         this.number = 0;
         this.isSelected = false;
+        this.fields = (to.type == FlowType.Pipe) ? pipeFields : [];
         this.model = (to.type == FlowType.Pipe) ? {
             pl: 0.0,
-            hl: 0.0,
-            m: null
+            hl: 0.0
         } : null;
 
         if (from.direction != FlowDirection.OUT ||

@@ -2,9 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import dispatcher from "../Dispatcher";
+import EditorField from "./EditorField";
 
 export default class FlowEditor extends React.Component {
-
 
     componentWillMount() {
         this.setState({ flow: this.props.flow })
@@ -30,6 +30,11 @@ export default class FlowEditor extends React.Component {
 
         this.state.flow.setPathIndex(index);
         this.forceUpdate();
+    }
+
+    flowPropertyChanged(prop, value) {
+        let { model } = this.state.flow;
+        model[prop] = value;
     }
 
     render() {
@@ -69,7 +74,7 @@ export default class FlowEditor extends React.Component {
             });
 
             startLabel = "Start - ";
-            node2Label = <label>End - Properties</label>;
+            node2Label = <label>End - Results Label</label>;
             newLine = <br/>
         }
 
@@ -85,6 +90,17 @@ export default class FlowEditor extends React.Component {
 
         pathButtonsClasses[this.state.flow.pathIndex] += " active";
         let noEventsCss = { pointerEvents: "none" };
+
+        let { model, fields:input_fields } = this.state.flow;
+        let fieldElms = input_fields.map((field, i) => {
+            const object = {
+                value: model[field.prop],
+                specs: field
+            }
+            return <EditorField key={i} field={object} onChange={this.flowPropertyChanged.bind(this)} />;
+        });
+        
+        let fieldsLine = (fieldElms.length > 0) ? <br/> : null;
 
         return (
             <ReactCSSTransitionGroup
@@ -107,7 +123,8 @@ export default class FlowEditor extends React.Component {
                             <button type="button" class={pathButtonsClasses[2]} onClick={this.pathButtonClicked.bind(this)} ><img style={noEventsCss} src="img/fl_vertical.png" /></button>
                             <button type="button" class={pathButtonsClasses[3]} onClick={this.pathButtonClicked.bind(this)} ><img style={noEventsCss} src="img/fl_horizontal.png" /></button>
                         </div><br /><br />
-                        <label>{startLabel}Properties</label><br />
+                        {fieldElms}{fieldsLine}
+                        <label>{startLabel}Results Label</label><br />
                         {elmsList}
                         {newLine}
                         {node2Label}

@@ -464,6 +464,62 @@ function buildSimpleTurbojet(){
     shaft.addCoupling(gas_turbine.shaftCouplings[0]);
 }
 
+function buildTurbojetMultiSpool(){
+
+    let air_flow = new Device("air_flow");
+    let diffuser = new Device("diffuser");
+    let compressor_lp = new Device("compressor");
+    let compressor_hp = new Device("compressor");
+    let burner = new Device("burner");
+    let gas_turbine_hp = new Device("gas_turbine");
+    let gas_turbine_lp = new Device("gas_turbine");
+    let nozzle = new Device("nozzle");
+    
+    air_flow.position = new Point(71.5, 330.5);
+    diffuser.position = new Point(227.5, 320.5);
+    compressor_lp.position = new Point(395.5, 244.5);
+    compressor_hp.position = new Point(506, 319.5);
+    burner.position = new Point(620, 165.5);
+    gas_turbine_hp.position = new Point(703, 244.5);
+    gas_turbine_lp.position = new Point(809.5, 319.5);
+    nozzle.position = new Point(996.5, 321.5);
+    
+    let flows = [
+        new Flow(air_flow.flowOutlets[0], diffuser.flowOutlets[0])
+            .flip().flip()
+            .displaceNode1Label(-15, 46),
+        new Flow(diffuser.flowOutlets[1], compressor_lp.flowOutlets[0])
+            .flip().flip()
+            .displaceNode1Label(17, 58),
+        new Flow(compressor_lp.flowOutlets[1], compressor_hp.flowOutlets[0])
+            .flip()
+            .displaceNode1Label(-114, -62),
+        new Flow(compressor_hp.flowOutlets[1], burner.flowOutlets[0])
+            .flip()
+            .displaceNode1Label(-120, -67),
+        new Flow(burner.flowOutlets[1], gas_turbine_hp.flowOutlets[0])
+            .displaceNode1Label(27, -61),
+        new Flow(gas_turbine_hp.flowOutlets[1], gas_turbine_lp.flowOutlets[0])
+            .displaceNode1Label(15, -35),
+        new Flow(gas_turbine_lp.flowOutlets[1], nozzle.flowOutlets[0])
+            .flip().flip()
+            .displaceNode1Label(33, -53)
+    ];
+
+    showTemperaturePressure(flows);
+
+    flows[0].displayNode1Props(["m", "p", "t"]);
+    flows[flows.length-1].displayNode1Props(["m", "p", "t"]);
+    
+    let shaft = new Shaft();
+    shaft.addCoupling(compressor_lp.shaftCouplings[0]);
+    shaft.addCoupling(gas_turbine_lp.shaftCouplings[0]);
+    
+    let shaft2 = new Shaft();
+    shaft2.addCoupling(compressor_hp.shaftCouplings[0]);
+    shaft2.addCoupling(gas_turbine_hp.shaftCouplings[0]);
+}
+
 function buildConfiguration(index) {
 
     switch (index) {
@@ -493,6 +549,9 @@ function buildConfiguration(index) {
             break;
         case 8:
             buildSimpleTurbojet();
+            break;
+        case 9:
+            buildTurbojetMultiSpool();
             break;
     }
 }

@@ -150,6 +150,10 @@ function loadAllRequiredResources() {
         loadImage("edit", "img/ic_edit.png"),
         loadImage("rotate", "img/ic_rotate.png"),
         loadImage("delete", "img/ic_delete.png"),
+        $.get("img/fl_flat_end.png"),
+        $.get("img/fl_flat_start.png"),
+        $.get("img/fl_horizontal.png"),
+        $.get("img/fl_vertical.png")
 
     ).then(function () {
 

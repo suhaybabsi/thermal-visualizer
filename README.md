@@ -2,11 +2,11 @@
 
 # Thermal-visualizer
 
-A research visual tool to model and analyze thermal systems. Emphasizing on calculation aspects.
+A research tool developed as an initiative to define an extensible and consistent visual way to model and analyze thermal systems, emphasizing on calculation aspects.
 
-[View The Tool Online](https://thermal-visualizer.herokuapp.com/visualizer)
+It uses [Thermal-core](https://github.com/suhaybabsi/thermal-core) framework to perform calculations on the back-end. Hit the following link to experiment with the tool.
 
-It uses [Thermal-core](https://github.com/suhaybabsi/thermal-core) framework to perform calculations on the back-end.
+[VIEW THE TOOL ONLINE](https://thermal-visualizer.herokuapp.com/visualizer)
 
 ## Running Locally (Development Mode)
 

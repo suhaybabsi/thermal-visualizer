@@ -9,6 +9,7 @@ import "./ui/SettingsForm";
 import Device from "./Device";
 import { Flow } from "./Flow";
 import { Shaft } from "./Shaft";
+import { Point } from "chart.js/src/elements";
 
 diagram.setup();
 diagram.on("ready", function () {

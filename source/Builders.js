@@ -1,4 +1,5 @@
 import Paper from "paper";
+import * as diagram from "./Diagram";
 
 export function circle(color, radius) {
 
@@ -125,3 +126,10 @@ export function arrow(color, orientation, width, height, head_width, head_margin
         return path;
     }
 }
+
+export function image(img_name) {
+    return () => {
+        return diagram.getImageInstance(img_name);
+    }
+}
+    

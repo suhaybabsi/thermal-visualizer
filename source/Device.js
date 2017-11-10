@@ -87,6 +87,8 @@ export default class Device extends Paper.Group {
             this.text = text;
             this.addChild(text);
         }
+
+        this.pivot = this.bounds.topLeft;
     }
 
     doubleClickHandler(e) {

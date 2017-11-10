@@ -752,7 +752,7 @@ export function updateFlowPaths() {
                 if (_flows.length > 0) {
 
                     cflow = _flows[0];
-                    
+
                     _flows.splice(1).map(fl => {
                         restFlows.push(fl)
                         possiblePaths.push({ flow: fl, path: [...flowsPath] });

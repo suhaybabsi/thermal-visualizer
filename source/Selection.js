@@ -72,6 +72,7 @@ class DeviceControls extends Paper.Group {
         this.isShown = true;
         this.currentDevice = device;
         this.position = device.bounds.bottomLeft.add(new Point(-5, 10));
+        this.rotateBtn.opacity = (this.isDeviceShaftConnected()) ? 0.4 : 1.0;
         diagram.overlayLayer.addChild(this);
     }
 
@@ -79,13 +80,16 @@ class DeviceControls extends Paper.Group {
         Actions.showEditorForDevice(this.currentDevice);
     }
 
-    rotateDevice() {
+    isDeviceShaftConnected(){
 
-        let isConnected = this.currentDevice.shaftCouplings.filter(cpl => {
+        return this.currentDevice.shaftCouplings.filter(cpl => {
             return cpl.shaft != null;
         }).length > 0;
+    }
 
-        if(!isConnected){
+    rotateDevice() {
+
+        if(!this.isDeviceShaftConnected()){
             this.currentDevice.turn();
             drawSelectionBorder(this.currentDevice);
         }

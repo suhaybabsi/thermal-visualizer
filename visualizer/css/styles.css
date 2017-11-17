@@ -333,6 +333,11 @@ body {
     color: #444;
 }
 
+#credits a {
+    color: green;
+    text-decoration: underline;
+}
+
 .setting-field {
 
     display: block;
@@ -389,4 +394,16 @@ div.f-label {
     position: relative;
     margin-left: 10pt;
     margin-right: 5pt;
+}
+
+#help {
+
+    position: fixed;
+    display: block;
+
+    left: 5px;
+    bottom: 65px;
+
+    font-size: 8.5pt;
+    color: green;
 }

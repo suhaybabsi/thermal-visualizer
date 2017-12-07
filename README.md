@@ -1,4 +1,4 @@
-![alt text](https://thermal-visualizer.herokuapp.com/visualizer/img/gas_turbine_sample.png)
+![alt text](/visualizer/img/gas_turbine_sample.png)
 
 # Thermal-visualizer
 

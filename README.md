@@ -16,7 +16,7 @@ It uses [Thermal-core](https://github.com/suhaybabsi/thermal-core) framework to 
 
 ## Running Locally (Development Mode)
 
-Make sure you have [Node.js](https://nodejs.org/) running on your machine. Then run the following command on Terminal (Mac OS X) or Commad Prompts (Windows).
+Make sure you have [Node.js](https://nodejs.org/) running on your machine. Then run the following commands on <i>Terminal (Mac OS X)</i> or <i>Commad Prompts (Windows)</i>.
 
 ```sh
 $ git clone https://github.com/suhaybabsi/thermal-visualizer.git
@@ -69,13 +69,13 @@ Define device properties using `Field` instances. Notice that it takes a `type` 
 
 ### Flows & Pipes
 
-Flows are used to represent the state of the substance (gas or liquid) streaming in or out a device. While `Pipe` is a thermal device like any other device. <i>Please refer to project [Thermal-core](https://github.com/suhaybabsi/thermal-core) to learn more about the concept</i>. And since we need to represent `Pipes` here the same way as `Flows`, the values `FlowType.Stream` and `FlowType.Pipe` were used to distinguish between them.
+`Flow`s are used to represent the state of the substance (gas or liquid) streaming in or out of a thermal device. While `Pipe` is a thermal device like any other device. <i>Please refer to project [Thermal-core](https://github.com/suhaybabsi/thermal-core) to learn more about the concept</i>. And since we need to represent `Pipe`s here the same way as `Flow`s, the values `FlowType.Stream` and `FlowType.Pipe` were used to distinguish between them.
 
 So, when ever a `Flow` is created, its type should be specified as `Pipe` or `Stream`. Then, those flows will be later treated on server accordingly.
 
 ### Outlets
 
-You can't define `Flow` type and properties directly. A `Flow` could be instaniated by providing two `Outlets` to the constructor function.
+You can't specify `Flow` type and properties directly. A `Flow` could be instaniated by providing two `Outlets` to the constructor function.
 
 ```javascript
 let flow = new Flow(turbine.flowOutlets[1], exhaust.flowOutlets[0]);

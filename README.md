@@ -8,9 +8,15 @@ It uses [Thermal-core](https://github.com/suhaybabsi/thermal-core) framework to 
 
 [VIEW THE TOOL ONLINE](https://thermal-visualizer.herokuapp.com/visualizer)
 
+## Technologies Used
+* Javascript (ES6/Harmony) with [Babel](https://babeljs.io/) used as a transpiler.
+* [ReactJS](https://reactjs.org/) used to build dynamic forms to edit devices and flows properties.
+* [PaperJS](http://paperjs.org/) used to build the 2D diagrams of thermal systems.
+* [Webpack](https://webpack.js.org/) used to bundle scripts and resources for web. 
+
 ## Running Locally (Development Mode)
 
-Make sure you have [Node.js](https://nodejs.org/) running on your machine.
+Make sure you have [Node.js](https://nodejs.org/) running on your machine. Then run the following command on Terminal (Mac OS X) or Commad Prompts (Windows).
 
 ```sh
 $ git clone https://github.com/suhaybabsi/thermal-visualizer.git
@@ -48,7 +54,39 @@ compressor: {
 },
 ```
 
-Further explanation will come along soon. 
+### Fields
+
+Define device properties using `Field` instances. Notice that it takes a `type` as a 4th parameter. Use this to specifiy how the property should be presented on forms:
+
+1. `.UNIT_COMBO`: The property will be displayed as a numeric value with a measurement unit that could be converted to others. For example, property Temperature will be represented as text input with a dropdown of measurement units (°F, °C and K).
+
+2. `.UNIT`: The property will be displayed as a numeric value with certain measurement unit. For example, property Efficiency will be represented as text input with a label of the measurement unit (%).
+
+3. `.SIMPLE`: The property will be displayed as a numeric value only.
+
+4. `.UNIT_COMBO_LABEL`: The property will be displayed exactly like in `.UNIT_COMBO` type. Except that the user <b>won't</b> be able to edit the value.
+
+
+### Flows & Pipes
+
+Flows are used to represent the state of the substance (gas or liquid) streaming in or out a device. While `Pipe` is a thermal device like any other device. <i>Please refer to project [Thermal-core](https://github.com/suhaybabsi/thermal-core) to learn more about the concept</i>. And since we need to represent `Pipes` here the same way as `Flows`, the values `FlowType.Stream` and `FlowType.Pipe` were used to distinguish between them.
+
+So, when ever a `Flow` is created, its type should be specified as `Pipe` or `Stream`. Then, those flows will be later treated on server accordingly.
+
+### Outlets
+
+You can't define `Flow` type and properties directly. A `Flow` could be instaniated by providing two `Outlets` to the constructor function.
+
+```javascript
+let flow = new Flow(turbine.flowOutlets[1], exhaust.flowOutlets[0]);
+```
+
+`OutletConfig` are used to define how many flows the device can take in or out, and where -in graphic- should the line of flows be drawn from. Those objects will be used to create device's `Outlet`s whenever get instaniated:
+
+```javascript
+let compressor = new Device("compressor");
+let oulet1 = compressor.flowOutlets[0]; //Access device flow outlets here.
+```
 
 ### Calculation logic
 

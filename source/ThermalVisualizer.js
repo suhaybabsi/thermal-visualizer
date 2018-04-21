@@ -23,5 +23,6 @@ $(".modal-body .list-group .list-group-item").click(function () {
     let conf = Number($(this).attr("conf"));
 
     diagram.clear();
+    woopra.track("machine_loaded", {machine_id: conf});
     buildConfiguration(conf);
 });

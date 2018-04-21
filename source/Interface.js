@@ -20,7 +20,7 @@ $("#calculate-btn").click(function (e) {
 });
 
 $('#clear-btn').click(function (e) {
-
+    woopra.track("diagram_cleared");
     diagram.clear();
 });
 
@@ -53,6 +53,7 @@ $("#right-btn").click(function () {
 });
 
 $("#code-btn").click(function () {
+    woopra.track("github");
     window.open("https://github.com/suhaybabsi/thermal-visualizer", '_blank');
 });
 

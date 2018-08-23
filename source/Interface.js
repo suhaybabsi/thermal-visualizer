@@ -116,6 +116,15 @@ function calculateModel() {
             $("#spinner").fadeOut();
         }, 1000);
 
+        if(res.error){
+
+            trackProps.success = "FAIL";
+            trackProps.error = res.error;
+            woopra.track("machine_calculated", trackProps);
+            showErrorMessage(res.error);
+            return;
+        }
+
         console.log(res);
         let { devices, flows, shafts, performance } = res;
 
@@ -158,4 +167,45 @@ function calculateModel() {
         trackProps.success = "FAIL";
         woopra.track("machine_calculated", trackProps);
     });
+}
+
+function showErrorMessage(error){
+    $('#messageModal .modal-body').empty();
+    $('#messageModal .modal-title').text("Calculation Error");
+    
+    var isString = (typeof error) === "string";
+    var isArray = error.hasOwnProperty("length") 
+                    && error.hasOwnProperty(0);
+            
+    var error_html;
+    if(isString){
+        
+        $('#messageModal .modal-title').text(error);
+        error_html ='<p>'+arguments[1]+'</p>';
+        
+    }else if(error.hasOwnProperty('device')){
+        
+        error_html ='<h4 style="color: red">'+error.device+'</h4>';
+        error_html +='<p>'+error.message+'</p>';
+        
+    }else if(isArray){
+        
+        for(var i=0; i < error.length; i++){
+            
+            var sub_error = error[i];
+            if(i === 0){
+                error_html ='<h4 style="color: red">'+sub_error.device+'</h4>';
+            }else{
+                error_html +='<h4 style="color: red">'+sub_error.device+'</h4>';
+            }
+            
+            error_html +='<p>'+sub_error.message+'</p>';
+        }
+    }else{
+        
+        error_html = "<p>"+error+"</p>";
+    }
+    
+    $('#messageModal .modal-body').append(error_html);
+    $('#messageModal').modal('show');
 }

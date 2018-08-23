@@ -407,3 +407,15 @@ div.f-label {
     font-size: 8.5pt;
     color: green;
 }
+
+.modal-header > div.glyphicon.glyphicon-exclamation-sign {
+    
+    position: absolute;
+    
+    width: 30px;
+    height: 30px;
+    font-size: 20pt;
+    margin-top: 10pt;
+    
+    color: red;
+}
